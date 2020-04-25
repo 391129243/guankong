@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"  
+	android:layout_height="wrap_content" >
+	<RelativeLayout
+		android:layout_width="354dp"
+	    android:layout_height="200dp"
+	    android:layout_centerInParent="true"
+        android:background="@color/white">
+		<LinearLayout
+			android:id="@+id/content"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingRight="@dimen/dp_68"
+			android:paddingLeft="@dimen/dp_62"
+			android:layout_marginTop="@dimen/dp_45"
+			android:gravity="center" >
+			<TextView
+				android:id="@+id/message"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:textSize="17sp" />
+		</LinearLayout>
+	   <RelativeLayout
+			android:layout_width="fill_parent"
+			android:layout_height="36dp"
+			android:layout_gravity="bottom"
+		   	android:layout_alignParentBottom="true"
+		    android:layout_marginBottom="@dimen/dp_32">
+			<TextView
+				android:id="@+id/negative_btn"
+				android:layout_width="136dp"
+				android:layout_height="32dp"
+				android:layout_marginLeft="32dp"
+				android:text="@string/cancel"
+				android:textSize="15sp"
+				android:textColor="@color/color_dialog_custom_btn_selector"
+				android:background="@drawable/dialog_custom_setting_btn_bg"
+				android:gravity="center"
+				android:layout_alignParentLeft="true" />
+
+			<TextView
+				android:id="@+id/positive_btn"
+				android:layout_width="136dp"
+				android:layout_height="32dp"
+				android:layout_marginRight="32dp"
+				android:text="@string/ok"
+				android:textColor="@color/color_dialog_custom_btn_selector"
+				android:textSize="15sp"
+				android:background="@color/color_dialog_btn_pressed"
+				android:gravity="center"
+				android:layout_alignParentRight="true" />
+		</RelativeLayout>
+	</RelativeLayout>
+
+
+	
+
+
+</RelativeLayout>
+

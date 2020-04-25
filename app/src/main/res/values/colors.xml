@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+
+    <color name="transparent_half">#a0000000</color>
+    <color name="transparent_half_orange">#a0ec6f1a</color>
+
+
+    <color name="top_bar_normal_bg">#ec6f1a</color>
+
+    <color name="bg_normal_gray">#e0e0e0</color>
+
+    <color name="line">#e0e0e0</color>
+    <color name="tv_gray_litter">#FAF0E6</color>
+    <color name="tv_gray_normal">#c0c0c0</color>
+    <color name="tv_gray_deep">#818181</color>
+    <color name="tv_gray_lit">#50b1b1b1</color>
+    <color name="tv_gray">@android:color/darker_gray</color>
+    <color name="tv_color">#ffffff</color>
+    <color name="list_glide">#50e0e0e0</color>
+
+
+    <!-- 公司主题色 -->
+    <color name="orange_main">#ec6f1a</color>
+    <color name="orange_light">#ffd39b</color>
+    <color name="orange_deep">#ff6f3a</color>
+    <color name="orange_most">#C76114</color>
+    <color name="orange_litter">#80aa6136</color>
+
+
+    <color name="white">#fffffa</color>
+    <color name="gray">#cccccc</color>
+
+    <color name="text_avgpre">#ffecc50d</color>
+    <color name="drop_down_selected">#7B1FA2</color>
+    <color name="drop_down_unselected">#111111</color>
+    <color name="black_translucent">#50000000</color>
+    <!-- 浅灰色 -->
+    <color name="gray_light">#E7E7E7</color>
+
+    <color name="mask_color">#88888888</color>
+    <color name="main_bg">#10aaaaaa</color>
+    <color name="main_bg_userinfo">#10777777</color>
+    <color name="temple_header_color">#50888888</color>
+    <color name="check_bg">#f2f2f2</color>
+    <color name="un_press_color">#9C27B0</color>
+
+    <color name="color_back">#207579</color>
+    <color name="color_backnor">#7fdcd9</color>
+    <color name="color_dialog">#33B5E5</color>
+
+    <!--******  floating Action Button *********-->
+    <color name="black_semi_transparent">#B2000000</color>
+    <color name="background">#e5e5e5</color>
+    <color name="half_black">#808080</color>
+    <color name="white_pressed">#f1f1f1</color>
+    <color name="pink">#e91e63</color>
+    <color name="pink_pressed">#ec407a</color>
+    <color name="blue_semi_transparent">#805677fc</color>
+    <color name="blue_semi_transparent_pressed">#80738ffe</color>
+
+
+    <!--****************  bottonnavigation   ********************-->
+
+    <color name="teal">#00796B</color>
+    <color name="te">#80FCE6C9</color>
+    <color name="brown">#8D6E63</color>
+    <color name="blue">#2196F3</color>
+    <color name="red">#FF0000</color>
+    <color name="grey">#607D8B</color>
+    <color name="orange">#F57C00</color>
+
+
+    <!--searchView-->
+    <color name="search_layover_bg">#50000000</color>
+    <color name="theme_primary">#2196F3</color>
+    <color name="black">#000000</color>
+
+    <color name="login_btn_bg_color">#77A6EE</color>
+    <color name="login_btn_pressed_bg_color">#C6DEF6</color>
+    <color name="login_all_bg_color">#d7d7d7</color>
+    <color name="login_input_bg_color">#ffffff</color>
+    <color name="login_input_hint_color">#B3B3B3</color>
+    <color name="login_title_bg_color">#66ccff</color>
+    <color name="login_title_color">#555555</color>
+    <color name="et_stroke_color">#BBBBBB</color>
+    <color name="login_seekbar_background">#D8D8D8</color>
+    <color name="login_seekbar_progress">#7AC23C</color>
+
+    <color name="exam_setting_title_color">#555555</color>
+    <color name="exam_frame_tool_bar_bg_color">#333333</color>
+    <color name="exam_frame_state_text_color">#0099ff</color>
+    <color name="exam_frame_time_text_color">#43A9F8</color>
+    <color name="exam_frame_time_toast_text_color">#666666</color>
+    <color name="exam_setting_seat_title_color">#77A6EE</color>
+
+    <!--管理员实验选择-->
+    <color name="admin_experiment_examinfo_start_color">#AFD2F8</color>
+    <color name="admin_experiment_examinfo_end_color">#7BACFA</color>
+
+    <color name="examinee_information_bg_color">#d7d7d7</color>
+    <color name="examinee_information_text_color">#505E70</color>
+    <color name="admin_experiment_name_color">#969696</color>
+    <color name="ckeck_new_version_color">#FC6F6F</color>
+
+
+    <color name="instructions_line_color">#d7d7d7</color>
+    <color name="instructions_text_color">#505E70</color>
+    <color name="fragment_title_bg_color">#f2f2f2</color>
+    <color name="edit_text_solid_color">#C1C9D5</color>
+    <color name="edit_text_stroke_color">#EDEFF2</color>
+
+    <color name="title_text_color">#43A9F8</color>
+
+    <color name="popup_bg">#8f000000</color>
+    <color name="tv_black">#000000</color>
+    <color name="tv_white">#ffffff</color>
+    <color name="white_bg">#ffffff</color>
+    <color name="gray_bg">#666666</color>
+    <color name="ling_gray">#D4E1EA</color>
+    <color name="pop_yes">#FB6666</color>
+    <color name="pop_no">#43A9F8</color>
+
+
+    <color name="White">#ffffff</color>
+    <color name="Black">#000000</color>
+    <color name="DodgerBlue">#1E90FF</color>
+    <color name="Gainsboro">#DCDCDC</color>
+    <color name="light_red">#ff6666</color>
+    <color name="light_blue">#7fb3b3ff</color>
+
+    <color name="green">#00ff00</color>
+
+    <color name="Grey">#888888</color>
+
+    <color name="MapViewBackground">#7f7f7f</color>
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#ff4081</color>
+
+    <color name="color_dialog_btn_pressed">#77A6EE</color>
+    <color name="color_dialog_btn_normal">#D8D8D8</color>
+
+</resources>

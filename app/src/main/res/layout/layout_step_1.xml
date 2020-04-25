@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:keyboard="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/sonStepInclude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/son_step_2_sub"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/son_step_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/son_step_1_addimage"
+            android:layout_width="@dimen/dp_160"
+            android:layout_height="@dimen/dp_100"
+            android:layout_margin="@dimen/dp_10"
+            android:scaleType="fitXY" />
+
+        <!-- type=4 显示 -->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/son_step_4_RecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_80"
+            android:visibility="gone" />
+        <RelativeLayout
+            android:id="@+id/layoutType3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_40">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_10"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/force_input1_statr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_28"
+                android:layout_marginTop="@dimen/dp_2"
+                android:paddingLeft="@dimen/dp_2"
+                android:paddingTop="@dimen/dp_2"
+                android:paddingBottom="@dimen/dp_5"
+                android:textColor="@color/examinee_information_text_color"
+                android:textSize="@dimen/dp_14"
+                android:textStyle="bold" />
+
+
+            <com.jay.easykeyboard.SystemKeyBoardEditText
+                android:id="@+id/contentEditText1"
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_electrical_experiment_edit_text_bg"
+                android:gravity="center"
+                android:hint="请输入"
+                android:paddingTop="@dimen/dp_5"
+                android:paddingBottom="@dimen/dp_5"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/login_input_hint_color"
+                android:textSize="@dimen/sp_14"
+                android:textStyle="bold"
+                android:visibility="visible"
+                keyboard:keyDrawable="@color/white"
+                keyboard:outSideCancel="true"
+                keyboard:xmlLayoutResId="@xml/keyboard_numbers" />
+
+            <TextView
+                android:id="@+id/force_input1_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_2"
+                android:paddingLeft="@dimen/dp_2"
+                android:paddingTop="@dimen/dp_2"
+                android:paddingBottom="@dimen/dp_5"
+                android:textColor="@color/examinee_information_text_color"
+                android:textSize="@dimen/sp_14"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/son_step_2_sub"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:background="@drawable/seletor_btn"
+        android:gravity="center"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_10"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_14" />
+</RelativeLayout>

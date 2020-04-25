@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_5"
+            android:background="@color/white_bg">
+
+            <TextView
+                android:id="@+id/tv_exam_frame_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_80"
+                android:layout_toLeftOf="@+id/tv_exam_frame_grade"
+                android:drawableLeft="@drawable/candidate_icon"
+                android:drawablePadding="@dimen/dp_4"
+                android:gravity="center_vertical"
+                android:text="张三"
+                android:textColor="@color/examinee_information_text_color"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/tv_exam_frame_grade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:drawableLeft="@drawable/grade_icon"
+                android:drawablePadding="@dimen/dp_4"
+                android:gravity="center_vertical"
+                android:text="初三"
+                android:textColor="@color/examinee_information_text_color"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/tv_exam_frame_candidate_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_80"
+                android:layout_toRightOf="@+id/tv_exam_frame_grade"
+                android:drawableLeft="@drawable/number_icon"
+                android:drawablePadding="@dimen/dp_4"
+                android:gravity="center_vertical"
+                android:text="123456"
+                android:textColor="@color/examinee_information_text_color"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_exam_frame_test"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_exam_frame_time"
+        android:layout_width="@dimen/dp_110"
+        android:layout_height="match_parent"
+        android:background="@color/exam_frame_tool_bar_bg_color"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_exam_frame_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:text="考试剩余时间:"
+                android:textColor="@color/tv_white"
+                android:textSize="@dimen/sp_15"
+                android:visibility="invisible" />
+
+            <com.learn.all_electric.view.CountDownProgressBar
+                android:id="@+id/cpb_countdown1"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_5"
+                android:visibility="invisible"
+                app:countDown_centerTextColor="@color/blue"
+                app:countDown_centerTextSize="14dp"
+                app:countDown_circleWidth="5dp"
+                app:countDown_firstColor="@android:color/transparent"
+                app:countDown_isShowGradient="false"
+                app:countDown_secondColor="@android:color/transparent" />
+
+            <TextView
+                android:id="@+id/btn_exam_frame_reset"
+                android:layout_width="@dimen/dp_80"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_30"
+                android:background="@drawable/shape_login_btn"
+                android:gravity="center"
+                android:paddingTop="@dimen/dp_5"
+                android:paddingBottom="@dimen/dp_5"
+                android:text="重新考试"
+                android:textColor="#fff"
+                android:textSize="@dimen/dp_16"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/btn_exam_frame_submit"
+                android:layout_width="@dimen/dp_80"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_15"
+                android:background="@drawable/shape_login_btn"
+                android:gravity="center"
+                android:paddingTop="@dimen/dp_5"
+                android:paddingBottom="@dimen/dp_5"
+                android:text="交卷"
+                android:textColor="#fff"
+                android:textSize="@dimen/dp_16"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/btn_exam_frame_handsup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btn_exam_frame_submit"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_15"
+                android:drawableTop="@drawable/icon_hand"
+                android:gravity="center"
+                android:paddingStart="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_5"
+                android:paddingEnd="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_5"
+                android:text="举手"
+                android:textColor="#fff"
+                android:textSize="@dimen/sp_16" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/dp_10">
+
+            <TextView
+                android:id="@+id/tv_wifi_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/tv_exam_frame_state"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/broken_icon"
+                android:gravity="center"
+                android:text="设备状态"
+                android:textColor="#fff"
+                android:textSize="@dimen/sp_14"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_exam_frame_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginBottom="@dimen/dp_15"
+                android:gravity="center"
+                android:text="实验设备连接异常"
+                android:textColor="@color/red"
+                android:textSize="@dimen/sp_12" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

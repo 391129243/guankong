@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include
+        android:id="@+id/user_choose_title_layout"
+        layout="@layout/include_title_backbtn_layout"/>
+
+    <LinearLayout
+        android:id="@+id/user_choose_subject_layout"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/dp_15"
+        android:layout_marginRight="@dimen/dp_25"
+        android:layout_marginLeft="@dimen/dp_25"
+        android:layout_below="@id/user_choose_title_layout"
+        android:background="@drawable/shape_white_radius_bg"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_back"
+            android:layout_marginLeft="@dimen/dp_22"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/user_choose_subject_tv"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:textSize="17sp"
+            android:textColor="@color/exam_setting_title_color"
+            android:text="@string/user_choose_experiment_subject"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/user_choose_subject_layout"
+        android:layout_marginLeft="@dimen/dp_25"
+        android:layout_marginRight="@dimen/dp_25"
+        android:layout_marginTop="@dimen/dp_15"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:padding="@dimen/dp_15"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <TextView
+            style="@style/admin_choose_experient_exam_info_content"
+            android:id="@+id/user_chooce_experiment_title"
+            android:layout_marginTop="@dimen/dp_12"
+            android:gravity="center"
+            android:drawableLeft="@drawable/icon_user_choose_junior_physical"
+            android:drawablePadding="@dimen/dp_15"
+            android:text="@string/user_choose_junior_physical"
+            android:textColor="@color/login_btn_bg_color"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/user_choose_experiment_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:overScrollMode="never" />
+    </LinearLayout>
+
+</RelativeLayout>

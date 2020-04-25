@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/dp_10"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/itemExplainTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="调节杠杆平衡,计算其平衡条件，实验中 g=10N/kg"
+        android:textColor="@color/instructions_text_color"
+        android:textSize="@dimen/sp_13" />
+
+
+    <ImageView
+        android:id="@+id/itemExplainImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:src="@drawable/icon_login_user" />
+</LinearLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/subjectview_parent_layout"
+    android:layout_width="305dp"
+    android:layout_height="@dimen/dp_180"
+    android:paddingTop="@dimen/dp_45"
+    android:paddingBottom="@dimen/dp_45"
+    android:background="@drawable/shape_subject_btn">
+
+    <ImageView
+        android:id="@+id/subjectview_subjet_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_subject_selection_biological"
+        android:layout_marginLeft="@dimen/dp_53"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:id="@+id/subjectview_subjet_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_64"
+        android:singleLine="true"
+        android:text="@string/subject_selection_chemical"
+        android:textSize="32sp"
+        android:textColor="@color/exam_setting_title_color"
+        android:layout_centerVertical="true" />
+
+</RelativeLayout>

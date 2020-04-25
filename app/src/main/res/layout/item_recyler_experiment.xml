@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent_layout"
+    android:layout_width="409dp"
+    android:layout_height="41dp"
+    android:paddingLeft="@dimen/dp_18"
+    android:paddingRight="@dimen/dp_18"
+    android:background="@drawable/selector_item_experiment_bg">
+
+    <TextView
+        android:id="@+id/item_experiment_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="1、连接串联电路和并联电路"
+        android:textSize="@dimen/text_size_normal"
+        android:textColor="@color/admin_experiment_name_color"
+        android:layout_centerVertical="true"/>
+    <ImageView
+        android:id="@+id/item_experiment_update_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/icon_update"/>
+</RelativeLayout>

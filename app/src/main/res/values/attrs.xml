@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="content_text" format="string"></attr>
+    <attr name="content_text_color" format="color"></attr>
+    <!--loading控件-->
+    <declare-styleable name="SLoadingIndicatorView">
+        <attr name="s_indicator">
+            <flag name="DefaultScale" value="0"/>
+            <flag name="LineScale" value="1"/>
+            <flag name="LineScalePulseOut" value="2"/>
+            <flag name="LineScalePulseOutThree" value="3"/>
+            <flag name="LineScalePulseOutWave" value="4"/>
+
+        </attr>
+        <attr name="s_indicator_color" format="color"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="CountDownProgressBar">
+        <attr name="countDown_circleWidth" format="dimension" />
+        <attr name="countDown_centerTextSize" format="dimension" />
+        <attr name="countDown_betaAngle" format="integer" />
+        <attr name="countDown_firstColor" format="color" />
+        <attr name="countDown_secondColor" format="color" />
+        <attr name="countDown_centerTextColor" format="color" />
+        <attr name="countDown_isShowGradient" format="boolean" />
+    </declare-styleable>
+
+    <!--自定义学科选择控件-->
+    <declare-styleable name= "SubjectView">
+        <attr name="content_text"/>
+        <attr name="content_text_color"/>
+        <attr name="content_img" format="reference"/>
+    </declare-styleable>
+
+
+    <attr name="xmlLayoutResId" format="reference"/>
+    <attr name="isRandom" format="boolean"/>
+    <attr name="keyDrawable" format="reference"/>
+    <declare-styleable name="SystemKeyboard">
+        <attr name="xmlLayoutResId"/>
+        <attr name="keyDrawable"/>
+        <attr name="isRandom"/>
+    </declare-styleable>
+    <declare-styleable name="SystemKeyBoardEditText">
+        <attr name="xmlLayoutResId"/>
+        <attr name="keyDrawable"/>
+        <attr name="outSideCancel" format="boolean"/>
+        <attr name="space" format="boolean"/>
+        <attr name="isRandom"/>
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:gravity="center_vertical" >
+    <TextView 
+
+        android:id="@+id/common_dialog_hint_txt"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:singleLine="false"
+        android:text=""
+        android:textSize="17sp"
+        android:textColor="#555555"/>
+    <TextView
+
+        android:id="@+id/common_hint_txt"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_12"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="系统将会替代您之前选择的座位号"
+        android:textSize="17sp"
+        android:textColor="#555555"/>
+</LinearLayout>

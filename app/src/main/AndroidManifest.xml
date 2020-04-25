@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.learn.all_electric">
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!-- 在SDCard中创建与删除文件权限 -->
+
+
+    <application
+        android:name="com.learn.all_electric.base.BaseApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="com.learn.all_electric.LoginActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!--学生实验选择-->
+        <activity
+            android:name="com.learn.all_electric.exam.DetailsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="landscape"
+            />
+        <activity
+            android:name="com.learn.all_electric.exam.ReportActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name="com.learn.all_electric.UserChooseExperimentActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name="com.learn.all_electric.SubjectSelectionActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name="com.learn.all_electric.ExamRoomSettingsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name="com.learn.all_electric.AdminChooseExperimentActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name="com.learn.all_electric.ParameterSettingActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden"/>
+
+        <receiver android:name=".receiver.NetworkChangeReceiver" />
+        <receiver android:name=".receiver.UploadScoreReceiver">
+            <intent-filter>
+                <action android:name="android.custom.broadcast.uploadscore_broadcast" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".UploadScoreService">
+
+        </service>
+        <!--后台运行-->
+        <service android:name=".LongRunningService"/>
+
+    </application>
+
+</manifest>

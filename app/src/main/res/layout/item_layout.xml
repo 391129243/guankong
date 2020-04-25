@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_child"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/scoring_items_layoutTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/examinee_information_text_color"
+            android:textSize="@dimen/dp_14" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@color/examinee_information_text_color" />
+
+        <TextView
+            android:id="@+id/scoring_values_layoutTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/examinee_information_text_color"
+            android:textSize="@dimen/dp_14" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@color/examinee_information_text_color" />
+
+        <TextView
+            android:id="@+id/examing_operation_layoutTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/examinee_information_text_color"
+            android:textSize="@dimen/dp_14" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@color/examinee_information_text_color" />
+
+        <TextView
+            android:id="@+id/examing_scoreing_layoutTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/examinee_information_text_color"
+            android:textSize="@dimen/dp_14" />
+    </LinearLayout>
+
+    <include
+        android:id="@+id/viewLagout"
+        layout="@layout/item_views" />
+
+</LinearLayout>

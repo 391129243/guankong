@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AdminChooseExperimentActivity">
+
+    <include
+        android:id="@+id/admin_choose_experient_title_layout"
+        layout="@layout/include_title_backbtn_layout"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_24"
+        android:layout_marginRight="@dimen/dp_24"
+        android:layout_marginTop="@dimen/dp_15"
+        android:padding="@dimen/dp_21"
+        android:background="@drawable/shape_admin_chooce_experiment_examinfo_bg">
+        <!--考试信息-->
+        <TextView
+            style="@style/admin_choose_experient_exam_info_content"
+            android:id="@+id/admin_chooce_exam_info_title"
+            android:gravity="center"
+            android:drawableLeft="@drawable/icon_admin_choose_experiment_exam_info"
+            android:drawablePadding="@dimen/dp_12"
+            android:text="@string/admin_choose_experiment_exam_info" />
+        <!--考试名称-->
+        <TextView
+            style="@style/admin_choose_experient_exam_info_content"
+            android:id="@+id/admin_chooce_exam_name_title"
+            android:layout_below="@id/admin_chooce_exam_info_title"
+            android:layout_marginTop="@dimen/dp_18"
+            android:layout_marginRight="@dimen/dp_20"
+            android:text="@string/exam_settings_name_title" />
+        <TextView
+            style="@style/admin_choose_experient_exam_info_content"
+            android:id="@+id/admin_chooce_exam_name_txt"
+            android:layout_below="@id/admin_chooce_exam_info_title"
+            android:layout_toRightOf="@id/admin_chooce_exam_name_title"
+            android:layout_marginTop="@dimen/dp_20"
+            android:text="广东省肇庆市端州区2020物理实验操作考试" />
+        <!--考试学校-->
+        <TextView
+            style="@style/admin_choose_experient_exam_info_content"
+            android:id="@+id/admin_chooce_exam_school_title"
+            android:layout_below="@id/admin_chooce_exam_name_title"
+            android:layout_marginTop="@dimen/dp_7"
+            android:layout_marginRight="@dimen/dp_20"
+            android:text="@string/exam_settings_school_title" />
+        <TextView
+            style="@style/admin_choose_experient_exam_info_content"
+            android:id="@+id/admin_chooce_exam_school_txt"
+            android:layout_below="@id/admin_chooce_exam_name_title"
+            android:layout_toRightOf="@id/admin_chooce_exam_school_title"
+            android:layout_marginTop="@dimen/dp_7" />
+        <!--考场编号-->
+        <TextView
+            style="@style/admin_choose_experient_exam_info_content"
+            android:id="@+id/admin_chooce_exam_roomnum_title"
+            android:layout_below="@id/admin_chooce_exam_school_title"
+            android:layout_marginTop="@dimen/dp_7"
+            android:layout_marginRight="@dimen/dp_20"
+            android:text="@string/exam_settings_room_num_title"
+/>
+        <TextView
+            style="@style/admin_choose_experient_exam_info_content"
+            android:id="@+id/admin_chooce_exam_roomnum_txt"
+            android:layout_below="@id/admin_chooce_exam_school_title"
+            android:layout_toRightOf="@id/admin_chooce_exam_roomnum_title"
+            android:layout_marginTop="@dimen/dp_7"
+            android:text="1" />
+        <TextView
+            style="@style/admin_choose_experient_exam_info_content"
+            android:id="@+id/admin_chooce_exam_seat_title"
+            android:layout_below="@id/admin_chooce_exam_roomnum_title"
+            android:layout_marginTop="@dimen/dp_7"
+            android:layout_marginRight="@dimen/dp_20"
+            android:text="@string/exam_settings_choice_seat_title" />
+        <TextView
+            style="@style/admin_choose_experient_exam_info_content"
+            android:id="@+id/admin_chooce_exam_seatnum_txt"
+            android:layout_below="@id/admin_chooce_exam_roomnum_title"
+            android:layout_toRightOf="@id/admin_chooce_exam_seat_title"
+            android:layout_marginTop="@dimen/dp_7"
+            android:text="1" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_25"
+        android:layout_marginRight="@dimen/dp_25"
+        android:layout_marginTop="@dimen/dp_18"
+        android:layout_marginBottom="@dimen/dp_18"
+        android:padding="@dimen/dp_18"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <TextView
+            style="@style/admin_choose_experient_exam_info_content"
+            android:id="@+id/admin_chooce_exam_experiment_title"
+            android:gravity="center"
+            android:drawableLeft="@drawable/icon_admin_choose_experiment_test"
+            android:drawablePadding="@dimen/dp_15"
+            android:text="@string/admin_choose_experiment_title"
+            android:textColor="@color/login_btn_bg_color"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/admin_choose_experient_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:overScrollMode="never" />
+    </LinearLayout>
+
+
+
+</LinearLayout>

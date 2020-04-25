@@ -1,0 +1,75 @@
+<resources>
+    <string name="app_name">智能化实验操作考试系统</string>
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="back">返回</string>
+
+    <string name="timeout_text">next</string>
+    <string name="loading">正在加载数据</string>
+
+    <!--登录-->
+    <string name="login_username_hint">账号</string>
+    <string name="login_password_hint">密码</string>
+    <string name="login_btn">登录</string>
+    <string name="login_seekbar_unpressed_hint">向右滑动完成验证</string>
+    <string name="login_network_hint">请稍等，加载中....</string>
+    <string name="login_fail">用户或密码不正确</string>
+    <string name="login_success">登录成功</string>
+    <string name="login_username_empty">用户名不能为空</string>
+    <string name="login_password_empty">密码不能为空</string>
+    <string name="login_password_length">密码长度不能超过6位</string>
+    <string name="login_vertify_error">未进行滑动验证</string>
+    <string name="login_vertify_success">完成验证</string>
+    <string name="login_vertify_start">向右滑动，完成验证</string>
+    <!--考场设置-->
+    <string name="exam_settings_logout">退出</string>
+    <string name="exam_settings_admin">管理员</string>
+    <string name="exam_settings_room_info_title">考场信息</string>
+    <string name="exam_settings_name_title">考试名称: </string>
+    <string name="exam_settings_school_title">考试学校: </string>
+    <string name="exam_settings_room_num_title">考场编号: </string>
+    <string name="exam_settings_seat_title">请选择本机座位号：</string>
+    <string name="exam_settings_choice_seat_title">座位号: </string>
+
+    <!--学科选择-->
+    <string name="subject_selection_user">用户</string>
+    <string name="subject_selection_junior">初中阶段：</string>
+    <string name="subject_selection_physical">物理</string>
+    <string name="subject_selection_biological">生物</string>
+    <string name="subject_selection_chemical">化学</string>
+    <!--键盘-->
+    <string name="complete">完成</string>
+
+    <!--选择实验-->
+    <string name="admin_choose_experiment_exam_info">考试信息</string>
+    <string name="admin_choose_experiment_title">请选择实验题目</string>
+    <string name="admin_name_experiment_sn1">1、连接串联电路和并联电路</string>
+    <string name="admin_name_experiment_sn2">2、串联并联电路中电流的关系</string>
+    <string name="admin_name_experiment_sn3">3、串联并联电路的电压的关系</string>
+    <string name="admin_name_experiment_sn4">4、测量小灯泡的电阻</string>
+    <string name="admin_name_experiment_sn5">5、测量小灯泡的电功率</string>
+    <string name="admin_name_experiment_sn6">6、探究影响摩擦力大小的因素</string>
+    <string name="admin_name_experiment_sn7">7、探究杠杆的平衡条件</string>
+    <string name="admin_name_experiment_sn8">8、天平测量密度</string>
+    <string name="admin_name_experiment_sn9">9、天平测量质量</string>
+    <string name="admin_name_experiment_sn10">10、用弹簧测力计量摩擦力</string>
+    <string name="admin_name_experiment_sn11">11、探究光的反射规律</string>
+    <string name="admin_name_experiment_sn12">12、平面镜成像规律</string>
+    <string name="admin_name_experiment_sn13">13、凸透镜成像规律</string>
+    <string name="user_choose_experiment_subject">学科</string>
+    <string name="user_choose_junior_physical">初中物理</string>
+
+    <string name="network_disconnect">网络连接失败，请检查网络设置</string>
+    <string name="dialog_message_choose_seat">系统将会替代你选择的座位号</string>
+
+    <!--参数设置-->
+    <string name="param_setting_title">参数设置</string>
+    <string name="param_setting_check_version">检测到新版本</string>
+    <string name="param_setting_right">右托盘</string>
+    <string name="param_setting_left">左托盘</string>
+    <string name="param_setting_rider">游码</string>
+
+    <string name="upload_score_fail">上传实验成绩失败</string>
+    <string name="upload_score_success">上传实验成绩成功</string>
+    <string name="exam_login_fail">考试登录失败</string>
+</resources>

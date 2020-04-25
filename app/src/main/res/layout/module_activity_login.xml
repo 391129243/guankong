@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:keyboard="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/login_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/icon_login_tab">
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="143dp">
+
+        <TextView
+            android:id="@+id/login_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/login_title_color"
+            android:layout_marginTop="180dp"
+            android:text="@string/app_name"
+            android:textStyle="bold"
+            android:textSize="@dimen/head_size" />
+
+        <com.jay.easykeyboard.SystemKeyBoardEditText
+            android:id="@+id/et_login_user_name"
+            android:layout_width="280dp"
+            android:layout_height="@dimen/dp_32"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/shape_login_edit_bg"
+            android:drawableLeft="@drawable/icon_login_user"
+            android:drawablePadding="@dimen/dp_5"
+            android:hint="@string/login_username_hint"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/login_input_hint_color"
+            android:textSize="@dimen/dp_14"
+            keyboard:keyDrawable="@color/white"
+            keyboard:outSideCancel="true"
+            keyboard:xmlLayoutResId="@xml/keyboard_numbers" />
+        <com.jay.easykeyboard.SystemKeyBoardEditText
+            android:id="@+id/et_login_passeord"
+            android:layout_width="280dp"
+            android:layout_height="@dimen/dp_32"
+            android:layout_marginTop="@dimen/dp_20"
+            android:background="@drawable/shape_login_edit_bg"
+            android:drawableLeft="@drawable/icon_login_password"
+            android:drawablePadding="@dimen/dp_5"
+            android:hint="@string/login_password_hint"
+            android:inputType="textPassword"
+            android:gravity="center_vertical"
+            android:textColorHint="@color/login_input_hint_color"
+            android:textSize="@dimen/dp_14"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            keyboard:keyDrawable="@color/white"
+            keyboard:outSideCancel="true"
+            keyboard:xmlLayoutResId="@xml/keyboard_numbers" />
+        <!--滑动验证-->
+
+        <RelativeLayout
+            android:id="@+id/login_vertify_layout"
+            android:layout_width="280dp"
+            android:layout_height="@dimen/dp_32"
+            android:layout_marginTop="@dimen/dp_12"
+            android:background="#D8D8D8">
+
+            <SeekBar
+                android:id="@+id/login_vertify_sb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="0"
+                android:progressDrawable="@drawable/layer_list_login_seekbar_bg"
+                android:thumb="@drawable/icon_login_thumb"
+                android:thumbOffset="16dp" />
+
+            <TextView
+                android:id="@+id/login_vertify_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/login_seekbar_unpressed_hint"
+                android:textColor="#888888"
+                android:textSize="@dimen/text_size_15sp" />
+        </RelativeLayout>
+
+
+
+        <TextView
+            android:id="@+id/btn_login"
+            android:layout_width="280dp"
+            android:layout_height="@dimen/dp_32"
+            android:layout_marginTop="@dimen/dp_40"
+            android:background="@drawable/selector_login_btn_bg"
+            android:gravity="center"
+            android:text="@string/login_btn"
+            android:textColor="@color/tv_white"
+            android:textSize="@dimen/text_size_medium" />
+
+    </LinearLayout>
+
+</RelativeLayout>
