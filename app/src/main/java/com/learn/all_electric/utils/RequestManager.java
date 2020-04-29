@@ -2,12 +2,16 @@ package com.learn.all_electric.utils;
 
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
 import com.google.gson.Gson;
+import com.learn.all_electric.base.BaseApplication;
 import com.learn.all_electric.bean.ExamDetailReponse;
 import com.learn.all_electric.bean.ExamScoreBean;
+import com.learn.all_electric.bean.UserLoginFailResponse;
+import com.learn.all_electric.bean.UserLoginResponse;
 import com.learn.all_electric.constants.Constant;
 import com.learn.all_electric.myinterface.ExamDetailCallback;
 import com.learn.all_electric.myinterface.LoginResponseCallback;
@@ -25,13 +29,13 @@ public class RequestManager implements ExamDetailCallback{
 
     public static String UPLOAD_SCORE_URL = "http://kkclass-api.asit.me/asit-device/exam/score";
 
-    private static String client_device = "Basic ZGV2aWNlOkMybWZZd3lNdlhiNHE1eGpHc3JwOTNOUm9lVU9kMEZ0";
-
     private static RequestManager mInstance = null;
     private RequestHander mRequestHandler = null;
     private LoginResponseCallback mCallBack = null;
     private ExamDetailCallback examCallBack = null;
     private static Context mContext;
+
+    private String upload_file_path;
 
     public static RequestManager getInstance(Context context){
         if(null == mInstance){
@@ -48,7 +52,9 @@ public class RequestManager implements ExamDetailCallback{
         mRequestHandler = new RequestHander(this);
         mContext = context;
 
+
     }
+
 
     private static class RequestHander extends Handler {
         private WeakReference<RequestManager> mRequestReference;
@@ -64,10 +70,20 @@ public class RequestManager implements ExamDetailCallback{
                 return;
             }
             switch (msg.what){
+                //上传结果，上传成功或成绩已存在则删除文件
                 case  Constant.MSG_UPLOAD_SCORE:
-                    String upload_result = (String)msg.obj;
-                    int code = msg.arg1;
+                    String upload_result = (String) msg.getData().get("upload_result");
+                    int code = (int) msg.getData().get("code");
+                    String upload_path = (String) msg.getData().get("upload_path");
                     ToastUtil.showToast(mContext,upload_result);
+                    if(code == 200){
+                        AndroidFileUtils.deleteFile(upload_path);
+                    }
+                    CtrlAppManager.getInstance(mContext.getApplicationContext())
+                            .restoreVariable();
+                    if(null != mUpdateHandler.onUploadExamScoreListener){
+                        mUpdateHandler.onUploadExamScoreListener.onCompleteUpload();
+                    }
                     break;
             }
         }
@@ -96,12 +112,14 @@ public class RequestManager implements ExamDetailCallback{
     /**
      * 刷新请求
      */
-    public void refleshRequest(String refresh_token)
+    public void refleshRequest(String refresh_token,final LoginResponseCallback callback)
     {
-        String token = "bearer " + refresh_token;
+        this.mCallBack = callback;
+        String refreshToken = refresh_token;
+
         HashMap<String, String> parameter = new HashMap<String, String>();
         parameter.put("tenantId","000000");
-        parameter.put("refresh_token", token);
+        parameter.put("refresh_token", refreshToken);
         parameter.put("grant_type","refresh_token");
         OkHttpUtils.doPost(REFRESH_URL,parameter,mCallBack);
     }
@@ -109,16 +127,16 @@ public class RequestManager implements ExamDetailCallback{
     /**
      * 获取考试详情
      * 方法:GET
-     * serialNo 机台序列号 AABBCCDD
+     * serialNo 机台序列号
      * questionNo 试题题号 SN1
      */
-    public void getExamDetail(String token, ExamDetailCallback callback){
+    public void getExamDetail(String token,String serialNo,String questionNo ,ExamDetailCallback callback){
 
         this.examCallBack = callback;
         try {
             HashMap<String, String> params = new HashMap<String, String>();
-            params.put("serialNo","AABBCCDD");
-            params.put("questionNo", "SN1");
+            params.put("serialNo",serialNo);
+            params.put("questionNo", questionNo);
             OkHttpUtils.doGetByParams(EXAM_DETAIL_URL,params,token,examCallBack);
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,9 +147,9 @@ public class RequestManager implements ExamDetailCallback{
      * 上传成绩
      * 使用resuqestBody提交数据
      */
-    public void uploadScore(ExamScoreBean examScoreBean,String token) {
+    public void uploadScore(ExamScoreBean examScoreBean,String token,String upload_file_path) {
 
-       // this.examCallBack = callback;
+        this.upload_file_path = upload_file_path;
         Gson gson = new Gson();
         if (null != examScoreBean) {
             String questScoreBody = gson.toJson(examScoreBean);
@@ -151,11 +169,23 @@ public class RequestManager implements ExamDetailCallback{
         int code = examDetailReponse.getCode();
         String upload_result = examDetailReponse.getMsg();
         Message message = Message.obtain();
-        message.arg1 = code;
-        message.obj = (String)upload_result;
+        Bundle bundle = new Bundle();
+        bundle.putInt("code",code);
+        bundle.putString("upload_result",upload_result);
+        bundle.putString("upload_path",upload_file_path);
+        message.setData(bundle);
         message.what = Constant.MSG_UPLOAD_SCORE;
         if(null != mRequestHandler){
             mRequestHandler.sendMessage(message);
         }
     }
+
+    public interface OnUploadExamScoreListener{
+        void onCompleteUpload();
+    }
+    private OnUploadExamScoreListener onUploadExamScoreListener;
+    public void setOnUploadExamScoreListener(OnUploadExamScoreListener listener){
+        this.onUploadExamScoreListener = listener;
+    }
+
 }

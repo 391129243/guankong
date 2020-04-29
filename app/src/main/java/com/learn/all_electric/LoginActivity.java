@@ -7,14 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.media.session.MediaSession;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -36,6 +38,9 @@ import com.learn.all_electric.myinterface.OnNetWorkChangedListener;
 import com.learn.all_electric.myinterface.OnReceiveScoreListener;
 import com.learn.all_electric.receiver.NetworkChangeReceiver;
 import com.learn.all_electric.receiver.UploadScoreReceiver;
+import com.learn.all_electric.service.LongRunningService;
+import com.learn.all_electric.service.UploadScoreService;
+import com.learn.all_electric.utils.CommonUtils;
 import com.learn.all_electric.utils.EncrypUtils;
 import com.learn.all_electric.utils.InternetUtils;
 import com.learn.all_electric.utils.LogUtil;
@@ -45,7 +50,9 @@ import com.learn.all_electric.utils.ProgressDialogUtil;
 import com.learn.all_electric.utils.RequestManager;
 import com.learn.all_electric.utils.StringUtils;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener ,OnNetWorkChangedListener, LoginResponseCallback,ExamDetailCallback, OnReceiveScoreListener {
@@ -58,8 +65,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private NetworkChangeReceiver netWorkChangedReceiver;
     private UploadScoreReceiver uploadScoreReceiver;
     private TextView btn_login;
-    private SystemKeyBoardEditText et_login_user_name;
-    private SystemKeyBoardEditText et_login_pass_word;
+   // private SystemKeyBoardEditText et_login_user_name;
+   // private SystemKeyBoardEditText et_login_pass_word;
+    private EditText et_login_user_name;
+    private EditText et_login_pass_word;
     private SeekBar mVertify_sb;
     private TextView mVertify_tv;
     private RelativeLayout mVertify_layout;
@@ -74,6 +83,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private String account;
     private String roleName;
     private String token;
+    private String questionNo;
 
     @Override
     protected int getLayoutId() {
@@ -84,17 +94,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     protected void initViews(Bundle savedInstanceState) {
 
         btn_login = (TextView) findViewById(R.id.btn_login);
-        et_login_user_name = findViewById(R.id.et_login_user_name);
-        et_login_pass_word = findViewById(R.id.et_login_passeord);
+        et_login_user_name = (EditText) findViewById(R.id.et_login_user_name);
+        et_login_pass_word = (EditText) findViewById(R.id.et_login_passeord);
         mVertify_sb = (SeekBar)findViewById(R.id.login_vertify_sb);
         mVertify_tv= (TextView)findViewById(R.id.login_vertify_tv);
         mVertify_layout = (RelativeLayout)findViewById(R.id.login_vertify_layout);
-        et_login_user_name.setText("Admin");
+
     }
 
     @Override
     protected void initListener() {
-        et_login_user_name.setOnKeyboardActionListener(new KeyBoardActionListener() {
+/*        et_login_user_name.setOnKeyboardActionListener(new KeyBoardActionListener() {
             @Override
             public void onComplete() {
 
@@ -136,7 +146,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onClearAll() {
 
             }
-        });
+        });*/
         btn_login.setOnClickListener(this);
         mVertify_sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -182,11 +192,32 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
+    /**
+     * 获取试验台设置的实验编号
+     */
+    private void iniVariables(){
+        mContext = this;
+        mUIHandler = new UIHandler(this);
+        RequestManager.getInstance(getApplicationContext()).setOnUploadExamScoreListener(new RequestManager.OnUploadExamScoreListener() {
+            @Override
+            public void onCompleteUpload() {
+                stopKeepTokenAlive();
+            }
+        });
+
+    }
+
+    private void initAccount(){
+        questionNo = PreferenceUtil.getInstance(getApplicationContext())
+                .getStringValue(SharedConstants.EXPERIMENT_SN,"");
+        et_login_user_name.setText("Admin");
+        et_login_pass_word.setText("");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = this;
-        mUIHandler = new UIHandler(this);
+        iniVariables();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             this.requestPermissions(PERMISSIONS, 102);
         }
@@ -196,6 +227,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void onResume() {
         super.onResume();
+        initAccount();
         clearseekbarStatus();
     }
 
@@ -203,10 +235,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceivers();
+        stopKeepTokenAlive();
         mContext = null;
         if(null != mProgressDialog){
             mProgressDialog.dismiss();
             mProgressDialog = null;
+        }
+        if(null != mUIHandler){
+            mUIHandler.removeCallbacksAndMessages(null);
+            mUIHandler = null;
         }
     }
 
@@ -215,6 +252,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_login:
+
                 onLogin();
 
                 break;
@@ -264,9 +302,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         String access_token = successResponse.getAccess_token();
                         mActivity.saveLoginParams(role_name,account,user_name,reflesh_token,access_token);
                         mActivity.displayToast(R.string.login_success);
+                        PreferenceUtil.getInstance(mActivity.getApplicationContext())
+                                .setValueByName(SharedConstants.IS_LOGIN, true);
                         if(role_name.equals("student")){
                            mActivity.onExamingLogin();
-
                         }
 
                     }
@@ -284,7 +323,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                         }else {
                             mActivity.displayToast(examDetailReponse.getMsg());
+                            mActivity.clearseekbarStatus();
                             mActivity.hideProgressDialog();
+                            mActivity.stopKeepTokenAlive();
                         }
 
                     }
@@ -293,7 +334,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 case MSG_EXAMDETAIL_FAIL:
                     mActivity.displayToast(R.string.exam_login_fail);
+                    mActivity.clearseekbarStatus();
                     mActivity.hideProgressDialog();
+                    mActivity.stopKeepTokenAlive();
                     break;
                 default:
                     break;
@@ -323,15 +366,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             uploadScoreReceiver = null;
         }
 
-        if(null != mUIHandler){
-            mUIHandler.removeCallbacksAndMessages(null);
-            mUIHandler = null;
-        }
     }
 
     @Override
     public void onNetworkChange(boolean isConnected, int type) {
 
+/*        LogUtil.i("1111","onNetworkChange" + isConnected);
+        if(isConnected){
+            //扫描一下sdcard中是否存在文件如果存在则上传
+            ArrayList<String> uploadFileList = new ArrayList<String>();
+            uploadFileList = checkSdcardUploadFile();
+            if(uploadFileList != null && uploadFileList.size() > 0){
+                for(String fileName : uploadFileList){
+                    onUploadExamScore(fileName);
+                }
+            }
+        }*/
 
     }
 
@@ -346,7 +396,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
 
     private void onLogin(){
-        LogUtil.i("1111","onLogin");
         if(InternetUtils.isConnect(this)){
 
             String account = et_login_user_name.getText().toString();
@@ -358,7 +407,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     onAdminLogin();
 
                 }else{
-                    onLoginRequest(account,password);
+                    if(StringUtils.isEmpty(questionNo)){
+                        hideProgressDialog();
+                        displayToast(R.string.admin_choose_experiment_null);
+                        clearseekbarStatus();
+                        initAccount();
+                        return;
+                    }else{
+                        onLoginRequest(account,password);
+                    }
+
                 }
 
 
@@ -412,21 +470,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     /**获取考试详情
      * 使用token作为请求头
-     *
+     * @param questionNo 考试编号
      * **/
-    private void getExamDetail(){
+    private void getExamDetail(String questionNo){
         if(InternetUtils.isConnect(this)){
             token = PreferenceUtil.getInstance(getApplicationContext())
                     .getStringValue(SharedConstants.TOKEN,"");
+            String serialNum = CommonUtils.getSerialNumber();
+            LogUtil.i("1111" ,"serialNum"  + serialNum);
             if(!StringUtils.isEmpty(token)){
 
-                RequestManager.getInstance(getApplicationContext()).getExamDetail(token,LoginActivity.this);
+                RequestManager.getInstance(getApplicationContext()).getExamDetail(token,serialNum,questionNo,LoginActivity.this);
             }else{
                 String access_token = PreferenceUtil.getInstance(getApplicationContext())
                         .getStringValue(SharedConstants.ACCESS_TOKEN,"");
                 token = "bearer " + access_token;
-                LogUtil.i("1111" , token);
-                RequestManager.getInstance(getApplicationContext()).getExamDetail(token,LoginActivity.this);
+
+                RequestManager.getInstance(getApplicationContext()).getExamDetail(token,serialNum,questionNo,LoginActivity.this);
             }
         }
     }
@@ -434,7 +494,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     /**考试类登录**/
     private void onExamingLogin(){
         //获取考试信息详情
-        getExamDetail();
+        LogUtil.i("1111","questionNo" + " " +questionNo);
+        startKeepTokenAlive();
+        getExamDetail(questionNo);
     }
 
     private void onAdminLogin(){
@@ -449,22 +511,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         LogUtil.i("1111","onStudentExamLogin");
 
         hideProgressDialog();
-       // String packageName = PackageUtils.getPackageName(questionNo);
-        String packageName = PackageConstants.SN14_TEMPERUTURE_PACKAGENAME;
+        String packageName = PackageUtils.getPackageName(questionNo);
+        //String packageName = PackageConstants.SN14_TEMPERUTURE_PACKAGENAME;
         if(PackageUtils.isApkInstalled(this,packageName)){
             //存在则拉起
             UserN userN = new UserN(account,userName,roleName,examDetailReponse);
             Gson gson = new Gson();
             String user_info = gson.toJson(userN);
-            ComponentName componentName = new ComponentName(PackageConstants.SN14_TEMPERUTURE_PACKAGENAME,
-                    "com.winters.fourteen_temperature.LoginActivity");
+            ComponentName componentName = new ComponentName(packageName,
+                    packageName+".LoginActivity");
             Intent intent = new Intent();
             intent.setComponent(componentName);;
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("user",user_info);
             startActivity(intent);
         }else{
-            LogUtil.i("1111","不存在拉起的应用");
+            displayToast(R.string.login_userexam_app_null);
             hideProgressDialog();
         }
 
@@ -479,6 +541,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         startService(intent);
     }
 
+    private void startKeepTokenAlive(){
+        //定时刷新token。保存token的状态
+        LogUtil.i("1111","startKeepTokenAlive");
+        Intent intent = new Intent(LoginActivity.this, LongRunningService.class);
+        startService(intent);
+    }
+
+    private void stopKeepTokenAlive(){
+        //定时刷新token。保存token的状态
+        LogUtil.i("1111","stopKeepTokenAlive");
+        Intent intent = new Intent(LoginActivity.this, LongRunningService.class);
+        stopService(intent);
+    }
 
     private void clearseekbarStatus(){
         mVertify_sb.setProgress(0);
@@ -491,8 +566,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 .getColor(R.color.login_seekbar_background));
     }
 
+    private ArrayList<String> checkSdcardUploadFile(){
+        ArrayList<String> fileNameList = new ArrayList<String>();
+        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+            String sdcard_upload_dir = Environment.getExternalStorageDirectory()+"/UploadScore/";
+            File dir = new File(sdcard_upload_dir);
+            if(dir.isDirectory()){
+                File[] array = dir.listFiles();
+                if(array.length > 0){
+                    for (File file: array){
+                        fileNameList.add(file.getName());
+                    }
+                }
+            }
 
-    /**进度对话框，可提示导出中等**/
+        }
+        return  fileNameList;
+    }
+
+
+    /**进度对话框，可提示登陆加载中**/
     private void showProgressDialog(String message){
         if(null == mProgressDialog){
             mProgressDialog = ProgressDialogUtil.createLoadingDialog(mContext, message);
@@ -555,12 +648,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
-
-
-    private void onBroacastUploadExamScore(){
-        String fileName = "6666_Martin_SN1.json";
-        Intent intent = new Intent(Constant.BROACAST_UPLOAD_SCORE);
-        intent.putExtra("score_file_name", fileName);
-        sendBroadcast(intent);
+    //空白处隐藏软键盘
+    private void hideSoftInputMethod(){
+        InputMethodManager im = (InputMethodManager)LoginActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(getCurrentFocus()!= null && getCurrentFocus().getWindowToken() != null){
+            im.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            hideSoftInputMethod();
+        }
+        return super.onTouchEvent(event);
+    }
+
+
 }

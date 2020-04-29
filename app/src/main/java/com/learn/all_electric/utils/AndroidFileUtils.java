@@ -64,10 +64,11 @@ public class AndroidFileUtils {
     /**
      * 删除文件方法
      */
-    public static void deleteFile(File file){
+    public static void deleteFile(String filePath){
+        File file = new File(filePath);
         if(file.exists()){
            boolean is_delete =  file.delete();
-            LogUtil.i("删除文件",is_delete +"");
+            LogUtil.i("1111","删除文件"+ is_delete +"");
         }
     }
 

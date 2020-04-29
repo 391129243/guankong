@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -38,10 +39,11 @@ import butterknife.OnClick;
 /**
  * 管理员实验选择
  */
-public class AdminChooseExperimentActivity extends BaseActivity{
+public class AdminChooseExperimentActivity extends BaseActivity implements View.OnClickListener{
 
     private RelativeLayout mTitleLayout;
     private Button mBackBtn;
+    private ImageView mSettingImg;
     private TextView mExamNameTv;
     private TextView mSchoolTv;
     private TextView mCentreNoTv;
@@ -50,6 +52,7 @@ public class AdminChooseExperimentActivity extends BaseActivity{
     private ArrayList<ChooseExperimentBean> mExperimentList;
     private ExperimentAdapter mExperimentAdapter;
     private CustomDialog mChooseDialog;
+    private CustomDialog mNoticeDialog;
 
     @Override
     protected int getLayoutId() {
@@ -60,6 +63,7 @@ public class AdminChooseExperimentActivity extends BaseActivity{
     protected void initViews(Bundle savedInstanceState) {
         mTitleLayout = (RelativeLayout)findViewById(R.id.admin_choose_experient_title_layout);
         mBackBtn = (Button)mTitleLayout.findViewById(R.id.back_btn);
+        //mSettingImg = (ImageView)mTitleLayout.findViewById(R.id.setting_img);
         mExamNameTv = (TextView)findViewById(R.id.admin_chooce_exam_name_txt);
         mSchoolTv = (TextView)findViewById(R.id.admin_chooce_exam_school_txt);
         mCentreNoTv = (TextView)findViewById(R.id.admin_chooce_exam_roomnum_txt);
@@ -71,13 +75,8 @@ public class AdminChooseExperimentActivity extends BaseActivity{
 
     @Override
     protected void initListener() {
-        mBackBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                finish();
-            }
-        });
+        mBackBtn.setOnClickListener(this);
+      // mSettingImg.setOnClickListener(this);
 
 
     }
@@ -100,7 +99,12 @@ public class AdminChooseExperimentActivity extends BaseActivity{
         super.onDestroy();
         if(null != mChooseDialog){
             mChooseDialog.dismiss();;
-            mChooseDialog.cancel();;
+            mChooseDialog= null;
+        }
+
+        if(null != mNoticeDialog){
+            mNoticeDialog.dismiss();;
+            mNoticeDialog = null;
         }
     }
 
@@ -120,7 +124,7 @@ public class AdminChooseExperimentActivity extends BaseActivity{
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(this,2);
         mExperimentView.setLayoutManager(mGridLayoutManager);
         mExperimentList = getAllExperimentName();
-        mExperimentAdapter = new ExperimentAdapter(mExperimentList);
+        mExperimentAdapter = new ExperimentAdapter(getApplicationContext(),mExperimentList);
         mExperimentView.setAdapter(mExperimentAdapter);
         mExperimentAdapter.notifyDataSetChanged();
         mExperimentAdapter.setOnItemClickListener(new ExperimentAdapter.OnItemClickListener() {
@@ -157,10 +161,13 @@ public class AdminChooseExperimentActivity extends BaseActivity{
 
     private void initExperimentStatus(){
         String qustionNo = PreferenceUtil.getInstance(getApplicationContext())
-                .getStringValue(SharedConstants.EXPERIMENT_SN,"SN1");
+                .getStringValue(SharedConstants.EXPERIMENT_SN,"");
         String experimentName = PackageUtils.getExperimentName(getApplicationContext(),qustionNo);
         if(!StringUtils.isEmpty(experimentName)){
             settingExperimentChecked(experimentName);
+        }else{
+
+            showSetExperimentNoticeDialog(getResources().getString(R.string.admin_choose_experiment_null));
         }
 
     }
@@ -211,6 +218,7 @@ public class AdminChooseExperimentActivity extends BaseActivity{
 
         return  list;
     }
+
 
     // 自定义条目修饰类
     public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
@@ -295,6 +303,47 @@ public class AdminChooseExperimentActivity extends BaseActivity{
         }
     }
 
+    private void showSetExperimentNoticeDialog(String message){
+        if(null != mNoticeDialog){
+            mNoticeDialog.dismiss();
+            mNoticeDialog = null;
+        }
+        if(null == mNoticeDialog){
+            mNoticeDialog = new CustomDialog(this);
+            LayoutInflater mInflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = (View)mInflater.inflate(R.layout.dialog_common_hint_layout, null);
+            TextView hintText = (TextView)view.findViewById(R.id.common_dialog_hint_txt);
+            TextView comonTxt = (TextView)view.findViewById(R.id.common_hint_txt);
+            comonTxt.setVisibility(View.INVISIBLE);
+            hintText.setText(message);
+            CustomDialog.Builder builder = new CustomDialog.Builder(this);
+            builder.setContentView(view);
+            builder.setPositiveButton(R.string.ok,  new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    // TODO Auto-generated method stub
+
+
+
+                    mNoticeDialog.dismiss();
+                }
+            });
+
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    // TODO Auto-generated method stub
+                    mNoticeDialog.dismiss();
+                    mNoticeDialog = null;
+                }
+            });
+            mNoticeDialog = builder.create();
+            mNoticeDialog.show();
+        }
+    }
+
 
     private void settingExperimentChecked(String experimentName){
         for(ChooseExperimentBean bean : mExperimentList){
@@ -305,7 +354,6 @@ public class AdminChooseExperimentActivity extends BaseActivity{
             }
         }
         mExperimentAdapter.notifyDataSetChanged();
-
     }
 
 
@@ -313,15 +361,15 @@ public class AdminChooseExperimentActivity extends BaseActivity{
      * Admin进行选择实验的参数设置
      */
     private void settingExperimentParam(String questionNo){
-        // String packageName = PackageUtils.getPackageName(questionNo);
-        String packageName = PackageConstants.SN14_TEMPERUTURE_PACKAGENAME;
+        String packageName = PackageUtils.getPackageName(questionNo);
         if(PackageUtils.isApkInstalled(this,packageName)){
             //存在则拉起
             UserN userN = new UserN("Admin","Admin","Admin",null);
             Gson gson = new Gson();
             String user_info = gson.toJson(userN);
-            ComponentName componentName = new ComponentName(PackageConstants.SN14_TEMPERUTURE_PACKAGENAME,
-                    "com.winters.fourteen_temperature.LoginActivity");
+            ComponentName componentName = new ComponentName(packageName,
+                    packageName+".LoginActivity");
+            LogUtil.i("1111" , packageName+".LoginActivity");
             Intent intent = new Intent();
             intent.setComponent(componentName);;
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -330,6 +378,20 @@ public class AdminChooseExperimentActivity extends BaseActivity{
         }else{
             LogUtil.i("1111","不存在拉起的应用");
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.back_btn:
+                finish();
+                break;
+            case R.id.setting_img:
+                //Intent intent = new Intent(AdminChooseExperimentActivity.this,WlanConnectActivity.class);
+               // startActivity(intent);
+                break;
+        }
+
     }
 
 }

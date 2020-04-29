@@ -222,7 +222,7 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        BaseApplication.clear();
+        //BaseApplication.clear();
     }
 
     @Override

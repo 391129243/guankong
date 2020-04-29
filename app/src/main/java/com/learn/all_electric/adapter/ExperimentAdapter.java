@@ -1,5 +1,6 @@
 package com.learn.all_electric.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,9 +17,11 @@ import java.util.List;
 
 public class ExperimentAdapter extends RecyclerView.Adapter<ExperimentAdapter.ExperimentHolder> {
     private List<ChooseExperimentBean> mExperimentList;
+    private static Context mContext;
 
-    public ExperimentAdapter(List<ChooseExperimentBean> list){
+    public ExperimentAdapter(Context context,List<ChooseExperimentBean> list){
         this.mExperimentList = list;
+        this.mContext = context;
     }
 
     static class ExperimentHolder extends RecyclerView.ViewHolder {
@@ -45,9 +48,11 @@ public class ExperimentAdapter extends RecyclerView.Adapter<ExperimentAdapter.Ex
 
             if(bean.isCheck()){
                 parentLayout.setBackgroundResource(R.drawable.shape_item_experiment_bg);
+                mExperimentNameTxt.setTextColor(mContext.getResources().getColor(R.color.white));
 
             }else{
                 parentLayout.setBackgroundResource(R.drawable.selector_item_experiment_bg);
+                mExperimentNameTxt.setTextColor(mContext.getResources().getColor(R.color.admin_experiment_name_color));
             }
 
 

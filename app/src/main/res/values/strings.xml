@@ -21,6 +21,7 @@
     <string name="login_vertify_error">未进行滑动验证</string>
     <string name="login_vertify_success">完成验证</string>
     <string name="login_vertify_start">向右滑动，完成验证</string>
+    <string name="login_userexam_app_null">不存在考试的实验</string>
     <!--考场设置-->
     <string name="exam_settings_logout">退出</string>
     <string name="exam_settings_admin">管理员</string>
@@ -58,6 +59,7 @@
     <string name="admin_name_experiment_sn13">13、凸透镜成像规律</string>
     <string name="user_choose_experiment_subject">学科</string>
     <string name="user_choose_junior_physical">初中物理</string>
+    <string name="admin_choose_experiment_null">此实验台未进行考试实验的设置，请进行考试实验设置</string>
 
     <string name="network_disconnect">网络连接失败，请检查网络设置</string>
     <string name="dialog_message_choose_seat">系统将会替代你选择的座位号</string>
@@ -72,4 +74,26 @@
     <string name="upload_score_fail">上传实验成绩失败</string>
     <string name="upload_score_success">上传实验成绩成功</string>
     <string name="exam_login_fail">考试登录失败</string>
+
+    <!--wifi连接-->
+    <string name = "wlan_title">WLAN</string>
+    <string name = "wifi_close">关闭</string>
+    <string name = "wifi_open">打开</string>
+    <string name = "wifi_connect">已连接</string>
+    <string name = "wifi_connecting">连接中</string>
+    <string name = "wifi_encrypted">已加密</string>
+    <string name = "wifi_save">已保存</string>
+    <string name = "wifi_status_title">状态</string>
+    <string name = "wifi_signal_strength_title">信号强度</string>
+    <string name = "wifi_security_title">加密</string>
+    <string name = "wifi_searching">搜索可用网络(…, &#8230;)</string>
+    <string name = "wifi_turn_off_status_hint">打开 Wi-Fi开关，查看可用网络</string>
+    <string name = "wifi_password">密码</string>
+    <string name = "dialog_wifi_checkbox_pwd">显示密码</string>
+    <string name = "dialog_wifi_checkbox_advanced">高级选项</string>
+    <string name = "dialog_wifi_forget">忘记</string>
+    <string name = "dialog_wifi_connect">连接</string>
+    <string name = "wifi_toast_null">Wifi密码不能为空</string>
+    <string name = "wifi_toast_length">Wifi密码长度不能小于8位</string>
+    <string name = "wifi_prompt">提示</string>
 </resources>

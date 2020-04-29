@@ -6,7 +6,7 @@ import java.util.List;
  * 上传成绩
  */
 public class ExamScoreBean {
-    private int examId;
+    private long examId;
 
     private String questionNo;
 
@@ -20,13 +20,6 @@ public class ExamScoreBean {
 
     private List<SubList> subList;
 
-    public void setExamId(int examId){
-        this.examId = examId;
-    }
-    public int getExamId(){
-        return this.examId;
-    }
-
     public double getPercentScore() {
         return percentScore;
     }
@@ -35,6 +28,12 @@ public class ExamScoreBean {
         this.percentScore = percentScore;
     }
 
+    public void setExamId(long examId){
+        this.examId = examId;
+    }
+    public long getExamId(){
+        return this.examId;
+    }
     public void setQuestionNo(String questionNo){
         this.questionNo = questionNo;
     }

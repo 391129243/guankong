@@ -30,7 +30,7 @@
             android:textStyle="bold"
             android:textSize="@dimen/head_size" />
 
-        <com.jay.easykeyboard.SystemKeyBoardEditText
+<!--        <com.jay.easykeyboard.SystemKeyBoardEditText
             android:id="@+id/et_login_user_name"
             android:layout_width="280dp"
             android:layout_height="@dimen/dp_32"
@@ -64,8 +64,37 @@
             android:textColor="@color/black"
             keyboard:keyDrawable="@color/white"
             keyboard:outSideCancel="true"
-            keyboard:xmlLayoutResId="@xml/keyboard_numbers" />
+            keyboard:xmlLayoutResId="@xml/keyboard_numbers" />-->
         <!--滑动验证-->
+        <EditText
+            android:id="@+id/et_login_user_name"
+            android:layout_width="280dp"
+            android:layout_height="@dimen/dp_32"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/shape_login_edit_bg"
+            android:drawableLeft="@drawable/icon_login_user"
+            android:drawablePadding="@dimen/dp_5"
+            android:hint="@string/login_username_hint"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/login_input_hint_color"
+            android:textSize="@dimen/dp_14" />
+        <EditText
+            android:id="@+id/et_login_passeord"
+            android:layout_width="280dp"
+            android:layout_height="@dimen/dp_32"
+            android:layout_marginTop="@dimen/dp_20"
+            android:background="@drawable/shape_login_edit_bg"
+            android:drawableLeft="@drawable/icon_login_password"
+            android:drawablePadding="@dimen/dp_5"
+            android:hint="@string/login_password_hint"
+            android:inputType="textPassword"
+            android:gravity="center_vertical"
+            android:textColorHint="@color/login_input_hint_color"
+            android:textSize="@dimen/dp_14"
+            android:singleLine="true"
+            android:textColor="@color/black" />
 
         <RelativeLayout
             android:id="@+id/login_vertify_layout"

@@ -1,5 +1,6 @@
 package com.learn.all_electric.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -8,6 +9,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 
 public class CommonUtils {
@@ -36,4 +38,31 @@ public class CommonUtils {
         }
         return true;
     }
+
+    /**
+     * 获取机台序列号
+     */
+    @SuppressLint({"NewApi", "MissingPermission"})
+    public static String getSerialNumber(){
+        String serialNo = "";
+        try{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {//9.0+
+                serialNo = Build.getSerial();
+
+            }else if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {//8.0+
+
+                serialNo = Build.SERIAL;
+            }else {
+                Class<?> c = Class.forName("android.os.SystemProperties");
+                Method get = c.getMethod("get", String.class);
+                serialNo = (String) get.invoke(c, "ro.serialno");
+            }
+        }catch (Exception e){
+            e.printStackTrace();;
+            LogUtil.i("getSerialNumber","获取设备序列号异常"+e.toString());
+        }
+        return serialNo;
+    }
+
+
 }

@@ -34,6 +34,16 @@
             android:text="@string/exam_settings_logout"
             android:textSize="@dimen/text_size_small"
             android:textColor="@color/white" />
+        <ImageView
+            android:id="@+id/setting_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_8"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/logout"
+            android:src="@drawable/icon_setting"
+            android:visibility="invisible"
+            android:layout_marginRight="20dp"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"

@@ -68,7 +68,7 @@ public class ExamDetailReponse {
 
     public static class Data  {
 
-        private int examId;
+        private long examId;
 
         private int gradeType;//年级
 
@@ -94,11 +94,11 @@ public class ExamDetailReponse {
 
         private List<SubList> subList;
 
-        public void setExamId(int examId) {
+        public void setExamId(long examId) {
             this.examId = examId;
         }
 
-        public int getExamId() {
+        public long getExamId() {
             return this.examId;
         }
 

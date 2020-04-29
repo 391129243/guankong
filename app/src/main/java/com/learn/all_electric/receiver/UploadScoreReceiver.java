@@ -6,17 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.learn.all_electric.LoginActivity;
-import com.learn.all_electric.UploadScoreService;
 import com.learn.all_electric.constants.Constant;
-import com.learn.all_electric.constants.SharedConstants;
-import com.learn.all_electric.myinterface.OnNetWorkChangedListener;
 import com.learn.all_electric.myinterface.OnReceiveScoreListener;
-import com.learn.all_electric.utils.InternetUtils;
-import com.learn.all_electric.utils.LogUtil;
-import com.learn.all_electric.utils.PreferenceUtil;
-import com.learn.all_electric.utils.RequestManager;
-import com.learn.all_electric.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

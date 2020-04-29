@@ -6,12 +6,12 @@
     android:orientation="vertical"
     android:paddingBottom="@dimen/dp_24">
 
-    <RadioButton
+    <ImageView
         android:id="@+id/rb_item_seat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:button="@null"
-        android:background="@drawable/selector_exam_room_seat"/>
+        android:background="@drawable/icon_examroom_seat_normal"/>
     <TextView
         android:id="@+id/tv_item_seat"
         android:layout_width="wrap_content"

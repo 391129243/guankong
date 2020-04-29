@@ -220,13 +220,11 @@ public class OkHttpUtils {
             @Override
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
                 LogUtil.i("1111" , "2222---"+ response.code() + "");
-//                String responseData = response.body().string();
 
                 if(response.code() == 200){
                     //服务器有回应，例如tokn过期回应请求未授权//回应都在msg内
                     Gson gson = new Gson();
                     String responeBody =  response.body().string();
-                    LogUtil.i("1111" , "3333---"+ responeBody + "");
                     ExamDetailReponse examDetailReponse = gson.fromJson(responeBody,ExamDetailReponse.class);
                     if(null != callback){
                         callback.onSuccessExamDetail(examDetailReponse);

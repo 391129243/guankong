@@ -19,7 +19,7 @@ public class PackageUtils {
      */
     public static String getPackageName(String questionNumer){
         if(questionNumer.equals("SN1")){
-            return PackageConstants.SN12_MIRROR_PACKAGENAME;
+            return PackageConstants.SN1_BALANCEBAR_PACKAGENAME;
         }else if(questionNumer.equals("SN7")){
             return PackageConstants.SN7_BALANCEBAR_PACKAGENAME;
         }else if(questionNumer.equals("SN8")){
@@ -32,7 +32,9 @@ public class PackageUtils {
             return PackageConstants.SN12_MIRROR_PACKAGENAME;
         }else if(questionNumer.equals("SN13")) {
             return PackageConstants.SN13_CONVEX_PACKAGENAME;
-        }else{
+        }else if(questionNumer.equals("SN14")){
+            return PackageConstants.SN14_TEMPERUTURE_PACKAGENAME;
+        }else {
             return "";
         }
 
@@ -89,6 +91,7 @@ public class PackageUtils {
         }else{
             return "";
         }
+
     }
 
 
@@ -100,34 +103,39 @@ public class PackageUtils {
      * @return
      */
     public static String getExperimentName(Context context,String questionNo){
-        if(questionNo.equals("SN1")){
-            return context.getString(R.string.admin_name_experiment_sn1);
-        }else if(questionNo.equals("SN2")){
-            return context.getString(R.string.admin_name_experiment_sn2);
-        }else if(questionNo.equals("SN3")){
-            return context.getString(R.string.admin_name_experiment_sn3);
-        }else if(questionNo.equals("SN4")) {
-            return context.getString(R.string.admin_name_experiment_sn4);
-        }else if(questionNo.equals("SN5")){
-            return context.getString(R.string.admin_name_experiment_sn5);
-        }else if(questionNo.equals("SN6")){
-            return context.getString(R.string.admin_name_experiment_sn6);
-        }else if(questionNo.equals("SN7")) {
-            return context.getString(R.string.admin_name_experiment_sn7);
-        }else if(questionNo.equals("SN8")) {
-            return context.getString(R.string.admin_name_experiment_sn8);
-        }else if(questionNo.equals("SN9")) {
-            return context.getString(R.string.admin_name_experiment_sn9);
-        }else if(questionNo.equals("SN10")) {
-            return context.getString(R.string.admin_name_experiment_sn10);
-        }else if(questionNo.equals("SN11")) {
-            return context.getString(R.string.admin_name_experiment_sn11);
-        }else if(questionNo.equals("SN12")) {
-            return context.getString(R.string.admin_name_experiment_sn12);
-        }else if(questionNo.equals("SN13")) {
-            return context.getString(R.string.admin_name_experiment_sn13);
-        }else{
+        if(StringUtils.isEmpty(questionNo)){
             return "";
+        }else {
+            if(questionNo.equals("SN1")){
+                return context.getString(R.string.admin_name_experiment_sn1);
+            }else if(questionNo.equals("SN2")){
+                return context.getString(R.string.admin_name_experiment_sn2);
+            }else if(questionNo.equals("SN3")){
+                return context.getString(R.string.admin_name_experiment_sn3);
+            }else if(questionNo.equals("SN4")) {
+                return context.getString(R.string.admin_name_experiment_sn4);
+            }else if(questionNo.equals("SN5")){
+                return context.getString(R.string.admin_name_experiment_sn5);
+            }else if(questionNo.equals("SN6")){
+                return context.getString(R.string.admin_name_experiment_sn6);
+            }else if(questionNo.equals("SN7")) {
+                return context.getString(R.string.admin_name_experiment_sn7);
+            }else if(questionNo.equals("SN8")) {
+                return context.getString(R.string.admin_name_experiment_sn8);
+            }else if(questionNo.equals("SN9")) {
+                return context.getString(R.string.admin_name_experiment_sn9);
+            }else if(questionNo.equals("SN10")) {
+                return context.getString(R.string.admin_name_experiment_sn10);
+            }else if(questionNo.equals("SN11")) {
+                return context.getString(R.string.admin_name_experiment_sn11);
+            }else if(questionNo.equals("SN12")) {
+                return context.getString(R.string.admin_name_experiment_sn12);
+            }else if(questionNo.equals("SN13")) {
+                return context.getString(R.string.admin_name_experiment_sn13);
+            }else{
+                return "";
+            }
         }
+
     }
 }

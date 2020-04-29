@@ -9,12 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.learn.all_electric.adapter.SeatAdapter;
 import com.learn.all_electric.base.BaseActivity;
+import com.learn.all_electric.bean.ChooseExperimentBean;
 import com.learn.all_electric.bean.SeatBean;
 import com.learn.all_electric.constants.SharedConstants;
+import com.learn.all_electric.utils.PackageUtils;
 import com.learn.all_electric.utils.PreferenceUtil;
 import com.learn.all_electric.utils.StringUtils;
 import com.learn.all_electric.view.CustomDialog;
@@ -38,10 +41,9 @@ public class ExamRoomSettingsActivity extends BaseActivity implements View.OnCli
     private SeatAdapter mSeatAdapter;
     private Button mLogoutBtn;
     private Button mSubmitBtn;
-
+    private ImageView mSettingImg;
+    private String seat_Name;
     private List<SeatBean> mSeatList;
-    private String token;
-    private String access_token;
     private CustomDialog mChooseDialog;
 
 
@@ -60,6 +62,7 @@ public class ExamRoomSettingsActivity extends BaseActivity implements View.OnCli
         mLogoutBtn = (Button)findViewById(R.id.logout);
         mSeatNoTxt = (TextView)findViewById(R.id.exam_setting_choose_seat_txt);
         mSubmitBtn = (Button)findViewById(R.id.exam_setting_submit_seat_btn);
+        //mSettingImg = (ImageView)findViewById(R.id.setting_img);
         mSeat_RecyView = (RecyclerView)findViewById(R.id.exam_room_recycler_seat);
     }
 
@@ -67,6 +70,7 @@ public class ExamRoomSettingsActivity extends BaseActivity implements View.OnCli
     protected void initListener() {
         mLogoutBtn.setOnClickListener(this);
         mSubmitBtn.setOnClickListener(this);
+        //mSettingImg.setOnClickListener(this);
     }
 
     @Override
@@ -79,7 +83,7 @@ public class ExamRoomSettingsActivity extends BaseActivity implements View.OnCli
     @Override
     protected void onResume() {
         super.onResume();
-
+        initSeatStatus();
     }
 
     @Override
@@ -106,9 +110,7 @@ public class ExamRoomSettingsActivity extends BaseActivity implements View.OnCli
         mSchoolTxt.setText("实验中学");
         // 考场编号
         mCentreNoTxt.setText("1");
-        String seat_Name = PreferenceUtil.getInstance(getApplicationContext())
-                .getStringValue(SharedConstants.SEAT_NO,"1/1");
-        showSeatNumber(seat_Name);
+
 
         mSeatList = new ArrayList<SeatBean>();
         mSeatList = getSeatList(seat_Name);
@@ -122,15 +124,34 @@ public class ExamRoomSettingsActivity extends BaseActivity implements View.OnCli
 
             @Override
             public void onItemClick(int position) {
-                SeatBean bean  = mSeatList.get(position);
-                String seatName = bean.getSeatName();
 
-                showChooseSeatDialog(seatName);
+                SeatBean bean  = mSeatList.get(position);
+                showChooseSeatDialog(bean);
             }
         });
+    }
+
+    private void initSeatStatus(){
+        seat_Name = PreferenceUtil.getInstance(getApplicationContext())
+                .getStringValue(SharedConstants.SEAT_NO,"1/1");
+        showSeatNumber(seat_Name);
+        if(!StringUtils.isEmpty(seat_Name)){
+            settingSeatNoChecked(seat_Name);
+        }
 
     }
 
+
+    private void settingSeatNoChecked(String seat_Name){
+        for(SeatBean bean : mSeatList){
+            if(bean.getSeatName().equals(seat_Name)){
+                bean.setChecked(true);
+            }else{
+                bean.setChecked(false);
+            }
+        }
+        mSeatAdapter.notifyDataSetChanged();
+    }
 
 
     private List<SeatBean> getSeatList(final String check_seatNo) {
@@ -174,7 +195,7 @@ public class ExamRoomSettingsActivity extends BaseActivity implements View.OnCli
     }
 
     /****/
-    private void showChooseSeatDialog(final String seatName){
+    private void showChooseSeatDialog(final SeatBean seatBean){
 
         if(null != mChooseDialog){
             mChooseDialog.dismiss();
@@ -186,19 +207,19 @@ public class ExamRoomSettingsActivity extends BaseActivity implements View.OnCli
             View view = (View)mInflater.inflate(R.layout.dialog_common_hint_layout, null);
             TextView hintText = (TextView)view.findViewById(R.id.common_dialog_hint_txt);
 
-            hintText.setText("确定选择"+ seatName+"座位吗?");
+            hintText.setText("确定选择"+ seatBean.getSeatName()+"座位吗?");
             CustomDialog.Builder builder = new CustomDialog.Builder(this);
             builder.setContentView(view);
-           // builder.setTitle("提示");
             builder.setPositiveButton(R.string.ok,  new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface arg0, int arg1) {
                     // TODO Auto-generated method stub
-
-                    showSeatNumber(seatName);
+                    String seat_name = seatBean.getSeatName();
+                    settingSeatNoChecked(seat_name);
+                    showSeatNumber(seat_name);
                     PreferenceUtil.getInstance(getApplicationContext())
-                            .setValueByName(SharedConstants.SEAT_NO,seatName);
+                            .setValueByName(SharedConstants.SEAT_NO,seat_name);
                     mChooseDialog.dismiss();
                 }
             });
@@ -228,6 +249,9 @@ public class ExamRoomSettingsActivity extends BaseActivity implements View.OnCli
             case R.id.exam_setting_submit_seat_btn:
                 //确定座位号，下一步
                 startActivity(new Intent(ExamRoomSettingsActivity.this, AdminChooseExperimentActivity.class));
+                break;
+            case R.id.setting_img:
+                //startActivity(new Intent(ExamRoomSettingsActivity.this, WlanConnectActivity.class));
                 break;
              default:
                 break;

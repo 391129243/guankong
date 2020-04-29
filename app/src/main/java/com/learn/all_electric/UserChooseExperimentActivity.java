@@ -56,7 +56,7 @@ public class UserChooseExperimentActivity extends BaseActivity implements View.O
         getAllExperimentName();
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(this,2);
         mPhysical_View.setLayoutManager(mGridLayoutManager);
-        mExperimentAdapter = new ExperimentAdapter(mExperimentList);
+        mExperimentAdapter = new ExperimentAdapter(getApplicationContext(),mExperimentList);
         mPhysical_View.setAdapter(mExperimentAdapter);
         mExperimentAdapter.notifyDataSetChanged();
 

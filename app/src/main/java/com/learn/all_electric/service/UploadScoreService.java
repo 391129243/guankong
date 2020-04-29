@@ -1,4 +1,4 @@
-package com.learn.all_electric;
+package com.learn.all_electric.service;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -82,7 +82,6 @@ public class UploadScoreService extends IntentService {
 
         }else{
             //
-
         }
     }
 }

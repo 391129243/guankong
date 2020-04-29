@@ -1,6 +1,7 @@
 package com.learn.all_electric.constants;
 
 public class SharedConstants {
+    public static String IS_LOGIN = "is_login";
     public static String LOGIN_USERNAME = "login_username";
     public static String LOGIN_PASSWORD = "login_password";
     public static String LOGIN_ACCOUNT = "login_account";
