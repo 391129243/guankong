@@ -91,4 +91,14 @@
         <item name="android:textSize">@dimen/sp_15</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
+    <!-- 横分割线 -->
+    <style name="horizontal_line">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">#8DB6CD</item>
+    </style>
+    <style name="on_off_wifi_control_checkbox_style" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/selector_wifi_control</item>
+    </style>
 </resources>

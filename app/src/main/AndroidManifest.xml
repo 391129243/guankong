@@ -4,10 +4,14 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <!-- 在SDCard中创建与删除文件权限 -->
-
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:name="com.learn.all_electric.base.BaseApplication"
@@ -49,14 +53,23 @@
             android:screenOrientation="landscape" />
         <activity
             android:name="com.learn.all_electric.ExamRoomSettingsActivity"
+            android:launchMode="singleTask"
             android:configChanges="orientation"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.learn.all_electric.AdminChooseExperimentActivity"
+            android:launchMode="singleTask"
             android:configChanges="orientation"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.learn.all_electric.ParameterSettingActivity"
+            android:launchMode="singleTask"
+            android:configChanges="orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name="com.learn.all_electric.WlanConnectActivity"
+            android:launchMode="singleTask"
             android:configChanges="orientation"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateHidden"/>
@@ -67,11 +80,11 @@
                 <action android:name="android.custom.broadcast.uploadscore_broadcast" />
             </intent-filter>
         </receiver>
-        <service android:name=".UploadScoreService">
+        <service android:name=".service.UploadScoreService">
 
         </service>
         <!--后台运行-->
-        <service android:name=".LongRunningService"/>
+        <service android:name=".service.LongRunningService"/>
 
     </application>
 
