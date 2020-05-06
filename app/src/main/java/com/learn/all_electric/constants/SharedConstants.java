@@ -6,6 +6,7 @@ public class SharedConstants {
     public static String LOGIN_PASSWORD = "login_password";
     public static String LOGIN_ACCOUNT = "login_account";
     public static String REFRESH_TOKEN = "refresh_token";
+    public static String LOGIN_USERTPYE = "user_type";
     public static String ACCESS_TOKEN = "access_token";
     public static String TOKEN = "token";//带bearer
     public static String EXPERIMENT_SN = "experiment_sn";//保存当前试验台设定的考试编号

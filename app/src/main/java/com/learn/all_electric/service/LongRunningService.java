@@ -9,6 +9,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 
+import com.learn.all_electric.bean.ExamDetailReponse;
 import com.learn.all_electric.bean.UserLoginFailResponse;
 import com.learn.all_electric.bean.UserLoginResponse;
 import com.learn.all_electric.constants.SharedConstants;
@@ -96,12 +97,14 @@ public class LongRunningService extends Service implements LoginResponseCallback
     private void updateTocken(){
         boolean isLogin = PreferenceUtil.getInstance(getApplicationContext())
                 .getBooleanValue(SharedConstants.IS_LOGIN,false);
+        String userType = PreferenceUtil.getInstance(getApplicationContext())
+                .getStringValue(SharedConstants.LOGIN_USERTPYE,"device-teacher");
         if(isLogin){
             LogUtil.i("1111","updateTocken"+ System.currentTimeMillis());
             String refresh_token = PreferenceUtil.getInstance(getApplicationContext())
                     .getStringValue(SharedConstants.REFRESH_TOKEN,"");
             if(!StringUtils.isEmpty(refresh_token)){
-                RequestManager.getInstance(getApplicationContext()).refleshRequest(refresh_token,this);
+                RequestManager.getInstance(getApplicationContext()).refleshRequest(refresh_token,userType,this);
             }
         }
     }
@@ -125,6 +128,11 @@ public class LongRunningService extends Service implements LoginResponseCallback
 
 
     }
+
+    public void onFail(ExamDetailReponse reponse){
+
+    }
+
 
     private void saveLoginParams(String roleName,String account,String user_name,String reflesh_token, String access_token){
 

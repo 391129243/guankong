@@ -22,6 +22,8 @@
     <string name="login_vertify_success">完成验证</string>
     <string name="login_vertify_start">向右滑动，完成验证</string>
     <string name="login_userexam_app_null">不存在考试的实验</string>
+    <string name="login_usertype_teacher">我是老师</string>
+    <string name="login_usertype_student">我是学生</string>
     <!--考场设置-->
     <string name="exam_settings_logout">退出</string>
     <string name="exam_settings_admin">管理员</string>

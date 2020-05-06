@@ -1,5 +1,6 @@
 package com.learn.all_electric.myinterface;
 
+import com.learn.all_electric.bean.ExamDetailReponse;
 import com.learn.all_electric.bean.UserLoginFailResponse;
 import com.learn.all_electric.bean.UserLoginResponse;
 
@@ -10,4 +11,6 @@ public interface LoginResponseCallback{
     public void onLoginSuccess(UserLoginResponse successResponse);
     //失败
     public void onLoginFailure(UserLoginFailResponse failResponse);
+    //失败
+    public void onFail(ExamDetailReponse reponse);
 }

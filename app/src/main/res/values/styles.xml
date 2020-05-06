@@ -101,4 +101,16 @@
     <style name="on_off_wifi_control_checkbox_style" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/selector_wifi_control</item>
     </style>
+
+    <!---->
+    <style name="style_login_usertype_tab" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/selector_login_usertype_bg</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textColor">@color/color_login_usertype</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>

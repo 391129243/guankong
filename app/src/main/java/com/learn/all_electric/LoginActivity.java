@@ -17,6 +17,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -72,18 +74,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private SeekBar mVertify_sb;
     private TextView mVertify_tv;
     private RelativeLayout mVertify_layout;
+    private RadioGroup userTypeRg;
+    private RadioButton userTeachRb;
     private Dialog mProgressDialog;
     private boolean isSuccess_vertify = false;
     private static final int MSG_LOGIN_FAIL = 0;
     private static final int MSG_LOGIN_SUCCESS = 1;
     private static final int MSG_EXAMDETAIL_SUCCESS = 3;
     private static final int MSG_EXAMDETAIL_FAIL = 4;
+    private static final int MSG_FAIL = 5;
     private Context mContext;
     private String userName;
     private String account;
     private String roleName;
     private String token;
     private String questionNo;
+    private String userType ;
 
     @Override
     protected int getLayoutId() {
@@ -99,6 +105,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mVertify_sb = (SeekBar)findViewById(R.id.login_vertify_sb);
         mVertify_tv= (TextView)findViewById(R.id.login_vertify_tv);
         mVertify_layout = (RelativeLayout)findViewById(R.id.login_vertify_layout);
+        userTypeRg = (RadioGroup)findViewById(R.id.user_type_gp);
+        userTeachRb = (RadioButton)findViewById(R.id.user_type_teacher);
+
+
 
     }
 
@@ -190,6 +200,25 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             }
         });
+
+        userTypeRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                int id = radioGroup.getCheckedRadioButtonId();
+                switch (id){
+                    case R.id.user_type_teacher:
+                        userType = "device-teacher";
+                        PreferenceUtil.getInstance(getApplicationContext()).setValueByName(SharedConstants.LOGIN_USERTPYE,userType);
+                        break;
+                    case R.id.user_type_student:
+                        userType = "device-student";
+                        PreferenceUtil.getInstance(getApplicationContext()).setValueByName(SharedConstants.LOGIN_USERTPYE,userType);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     /**
@@ -210,8 +239,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void initAccount(){
         questionNo = PreferenceUtil.getInstance(getApplicationContext())
                 .getStringValue(SharedConstants.EXPERIMENT_SN,"");
-        et_login_user_name.setText("Admin");
+        et_login_user_name.setText("");
         et_login_pass_word.setText("");
+        userType = PreferenceUtil.getInstance(getApplicationContext())
+                .getStringValue(SharedConstants.LOGIN_USERTPYE,"device-teacher");
+        if(userType.equals("device-teacher")){
+            userTeachRb.setChecked(true);
+        }else {
+            userTeachRb.setChecked(false);
+        }
     }
 
     @Override
@@ -306,6 +342,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                 .setValueByName(SharedConstants.IS_LOGIN, true);
                         if(role_name.equals("student")){
                            mActivity.onExamingLogin();
+                        }else if(role_name.equals("teacher-device")){
+                            mActivity.onAdminLogin();
                         }
 
                     }
@@ -337,6 +375,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     mActivity.clearseekbarStatus();
                     mActivity.hideProgressDialog();
                     mActivity.stopKeepTokenAlive();
+                    break;
+
+                case MSG_FAIL:
+                    ExamDetailReponse response = (ExamDetailReponse)msg.obj;
+                    if(null != response){
+                        String message = response.getMsg();
+                        mActivity.displayToast(message);
+                    }
+                    mActivity.clearseekbarStatus();
+                    mActivity.hideProgressDialog();
                     break;
                 default:
                     break;
@@ -403,9 +451,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             if(checkInput(account,password)){
                 showProgressDialog(getResources().getString(R.string.login_network_hint));
-                if(account.equals("Admin")){
-                    onAdminLogin();
-
+                if(userTeachRb.isChecked()){
+                    //onAdminLogin();
+                    onLoginRequest(account,password,userType);
                 }else{
                     if(StringUtils.isEmpty(questionNo)){
                         hideProgressDialog();
@@ -414,7 +462,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         initAccount();
                         return;
                     }else{
-                        onLoginRequest(account,password);
+                        onLoginRequest(account,password,userType);
                     }
 
                 }
@@ -430,9 +478,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     }
 
-    private void onLoginRequest(String account,String password){
+    private void onLoginRequest(String account,String password,String user_type){
         String pwdByMd5 = EncrypUtils.md5Decode32(password);
-        RequestManager.getInstance(getApplicationContext()).LoginRequest(account,pwdByMd5, LoginActivity.this);
+        RequestManager.getInstance(getApplicationContext()).LoginRequest(account,pwdByMd5, user_type,LoginActivity.this);
     }
 
     private boolean checkInput(String account, String password){
@@ -468,6 +516,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
 
+
+    /**考试类登录**/
+    private void onExamingLogin(){
+        //获取考试信息详情
+        LogUtil.i("1111","questionNo" + " " +questionNo);
+        startKeepTokenAlive();
+        getExamDetail(questionNo);
+    }
+
+    /**管理员登录**/
+    private void onAdminLogin(){
+        //跳转考场设置
+        hideProgressDialog();
+        startActivity(new Intent(LoginActivity.this, ExamRoomSettingsActivity.class));
+    }
+
+
     /**获取考试详情
      * 使用token作为请求头
      * @param questionNo 考试编号
@@ -489,20 +554,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 RequestManager.getInstance(getApplicationContext()).getExamDetail(token,serialNum,questionNo,LoginActivity.this);
             }
         }
-    }
-
-    /**考试类登录**/
-    private void onExamingLogin(){
-        //获取考试信息详情
-        LogUtil.i("1111","questionNo" + " " +questionNo);
-        startKeepTokenAlive();
-        getExamDetail(questionNo);
-    }
-
-    private void onAdminLogin(){
-        //跳转考场设置
-        hideProgressDialog();
-        startActivity(new Intent(LoginActivity.this, ExamRoomSettingsActivity.class));
     }
 
 
@@ -614,8 +665,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if(null != mUIHandler){
             mUIHandler.sendMessage(msg);
         }
-
-
     }
 
     @Override
@@ -624,6 +673,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         Message msg = Message.obtain();
         msg.obj = failResponse;
         msg.what = MSG_LOGIN_FAIL;
+        if(null != mUIHandler){
+            mUIHandler.sendMessage(msg);
+        }
+    }
+
+    //失败
+    public void onFail(ExamDetailReponse reponse){
+        Message msg = Message.obtain();
+        msg.obj = reponse;
+        msg.what = MSG_FAIL;
         if(null != mUIHandler){
             mUIHandler.sendMessage(msg);
         }

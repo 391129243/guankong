@@ -138,7 +138,7 @@ public class OkHttpUtils {
         });
     }
     //post请求
-    public static void doPost(String url, Map<String, String> params, final LoginResponseCallback callback)
+    public static void doPost(String url, Map<String, String> params, String user_type,final LoginResponseCallback callback)
     {
         final LoginResponseCallback mCallback = callback;
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -156,7 +156,7 @@ public class OkHttpUtils {
                 .post(builder.build())
                 .url(url)
                 .addHeader("Authorization",client_device)
-                .addHeader("User-Type","device-student")
+                .addHeader("User-Type",user_type)
                 .build();
 
         okhttp3.Call call = okHttpClient.newCall(request);
@@ -171,7 +171,7 @@ public class OkHttpUtils {
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
 
                 String responseBody = response.body().string();
-                LogUtil.i("1111" , "1111---"+ response.code() + "");
+                LogUtil.i("1111" , "doPost1111---"+ response.code() + "");
                 if(response.code() == 200){
                     if(responseBody.contains("error_code")){
                         Gson gson = new Gson();
@@ -188,6 +188,13 @@ public class OkHttpUtils {
                         }
                     }
 
+                }else{
+                    LogUtil.i("1111" , "doPost responseBody---"+ responseBody + "");
+                    Gson gson = new Gson();
+                    ExamDetailReponse failResponse = gson.fromJson(responseBody,ExamDetailReponse.class);
+                    if(null != mCallback){
+                        mCallback.onFail(failResponse);
+                    }
                 }
 
             }

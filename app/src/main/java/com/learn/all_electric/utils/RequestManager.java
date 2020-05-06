@@ -98,7 +98,7 @@ public class RequestManager implements ExamDetailCallback{
      * @param password
      * @param callback
      */
-    public void LoginRequest(String account,String password,final LoginResponseCallback callback){
+    public void LoginRequest(String account,String password,String user_type,final LoginResponseCallback callback){
         this.mCallBack = callback;
         HashMap<String, String> parameter = new HashMap<String, String>();
         parameter.put("tenantId","000000");
@@ -106,13 +106,13 @@ public class RequestManager implements ExamDetailCallback{
         parameter.put("password",password);
         parameter.put("grant_type","password");
 
-        OkHttpUtils.doPost(USER_LOGIN_URL,parameter,mCallBack);
+        OkHttpUtils.doPost(USER_LOGIN_URL,parameter,user_type,mCallBack);
     }
 
     /**
      * 刷新请求
      */
-    public void refleshRequest(String refresh_token,final LoginResponseCallback callback)
+    public void refleshRequest(String refresh_token,String user_type,final LoginResponseCallback callback)
     {
         this.mCallBack = callback;
         String refreshToken = refresh_token;
@@ -121,7 +121,7 @@ public class RequestManager implements ExamDetailCallback{
         parameter.put("tenantId","000000");
         parameter.put("refresh_token", refreshToken);
         parameter.put("grant_type","refresh_token");
-        OkHttpUtils.doPost(REFRESH_URL,parameter,mCallBack);
+        OkHttpUtils.doPost(REFRESH_URL,parameter,user_type,mCallBack);
     }
 
     /**
