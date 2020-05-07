@@ -7,10 +7,12 @@ import com.learn.all_electric.bean.UserLoginFailResponse;
 import com.learn.all_electric.bean.UserLoginResponse;
 import com.learn.all_electric.myinterface.ExamDetailCallback;
 import com.learn.all_electric.myinterface.LoginResponseCallback;
+import com.learn.all_electric.myinterface.RequestCallBack;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -28,10 +30,14 @@ public class OkHttpUtils {
     private static String client_device = "Basic ZGV2aWNlOkMybWZZd3lNdlhiNHE1eGpHc3JwOTNOUm9lVU9kMEZ0";
 
     //get请求
-    public static void doGetByHeaders(String url, String token, ExamDetailCallback callback)
+    public static void doGetByHeaders(String url, String token, RequestCallBack callback)
     {
-        final ExamDetailCallback mCallBack = callback;
-        OkHttpClient okHttpClient = new OkHttpClient();
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)//设置连接超时
+                .readTimeout(60, TimeUnit.SECONDS)//读取超时
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)//超时重连
+                .build();
 
         //创建Request
         Request request = new Request.Builder()
@@ -43,22 +49,20 @@ public class OkHttpUtils {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
-                if(null != mCallBack){
-                    mCallBack.onFailExamDetail();
+                if(null != callback){
+                    callback.onFailure();
                 }
             }
 
             @Override
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
-                LogUtil.i("1111" , 3333 + response.code()+"");
+
                 if(response.code() == 200){
                     Gson gson = new Gson();
                     String responeBody = response.body().string();
-                    LogUtil.i("room" , responeBody);
-                    ExamDetailReponse examDetailReponse = gson.fromJson(responeBody,ExamDetailReponse.class);
-                    if(null != mCallBack){
+                    if(null != callback){
 
-                        mCallBack.onSuccessExamDetail(examDetailReponse);
+                        callback.onSuccess(responeBody);
                     }
                 }
 
@@ -76,7 +80,12 @@ public class OkHttpUtils {
 
     public static void doGetByParams(String url, HashMap<String ,String> params, String token, ExamDetailCallback callback) {
         final ExamDetailCallback mCallBack = callback;
-        OkHttpClient okHttpClient = new OkHttpClient();
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)//设置连接超时
+                .readTimeout(60, TimeUnit.SECONDS)//读取超时
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)//超时重连
+                .build();
         //创建一个HttpUrl
         HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
         if (params != null) {
@@ -119,7 +128,12 @@ public class OkHttpUtils {
 
     public static void doGet(String url)
     {
-        OkHttpClient okHttpClient = new OkHttpClient();
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)//设置连接超时
+                .readTimeout(60, TimeUnit.SECONDS)//读取超时
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)//超时重连
+                .build();
         //创建Request
         Request request = new Request.Builder()
                 .url(url)
@@ -141,7 +155,13 @@ public class OkHttpUtils {
     public static void doPost(String url, Map<String, String> params, String user_type,final LoginResponseCallback callback)
     {
         final LoginResponseCallback mCallback = callback;
-        OkHttpClient okHttpClient = new OkHttpClient();
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)//设置连接超时
+                .readTimeout(60, TimeUnit.SECONDS)//读取超时
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)//超时重连
+                .build();
+
 
         FormBody.Builder builder=new FormBody.Builder();
         if(params!=null)
@@ -207,7 +227,12 @@ public class OkHttpUtils {
     {
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody requestBody = RequestBody.create(JSON, body);
-        OkHttpClient okHttpClient = new OkHttpClient();
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)//设置连接超时
+                .readTimeout(60, TimeUnit.SECONDS)//读取超时
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)//超时重连
+                .build();
 
         Request request=new Request.Builder()
                 .url(url)

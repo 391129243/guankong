@@ -24,6 +24,10 @@ public class ExperimentAdapter extends RecyclerView.Adapter<ExperimentAdapter.Ex
         this.mContext = context;
     }
 
+    public void setmExperimentList(List<ChooseExperimentBean> list){
+        this.mExperimentList = list;
+    }
+
     static class ExperimentHolder extends RecyclerView.ViewHolder {
         View experimentView;
         RelativeLayout parentLayout;

@@ -3,13 +3,19 @@ package com.learn.all_electric.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 
+import com.learn.all_electric.bean.AppInfo;
+
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CommonUtils {
@@ -65,4 +71,65 @@ public class CommonUtils {
     }
 
 
+    /***
+     * 获取版本号
+     * versionCode
+     */
+    public static int getAppVersionCode(Context context){
+        int versionCode = 0;
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getApplicationContext().getPackageName(), 0);
+            versionCode = pi.versionCode;
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return versionCode;
+    }
+
+    /**
+     * 获取版本名称
+     * versionName
+     */
+    public static String getAppVersionName(Context context){
+        String versionName = "";
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            versionName = pi.versionName;
+            if(null == versionName || versionName.length()<=0){
+                versionName = "";
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return versionName;
+    }
+
+    //获取APP列表
+    public static ArrayList<AppInfo> getAppInfoList(Context context){
+        try{
+            PackageManager packageManager = context.getPackageManager();
+            ArrayList<AppInfo> items = new ArrayList<AppInfo>();
+            List<PackageInfo> packageInfos = packageManager.getInstalledPackages(0);
+            for (PackageInfo pInfo : packageInfos) {
+
+                if(pInfo.packageName.startsWith("com.winters")){
+                    AppInfo appInfo = new AppInfo();
+                    appInfo.setAppName(pInfo.applicationInfo.loadLabel(packageManager).toString());
+                    appInfo.setPackageName(pInfo.packageName);
+                    appInfo.setVersionName(pInfo.versionName);
+                    appInfo.setVersionCode(pInfo.versionCode);
+                    items.add(appInfo);
+                }
+            }
+
+            return items;
+
+        }catch (Exception e){
+            return null;
+        }
+
+    }
 }

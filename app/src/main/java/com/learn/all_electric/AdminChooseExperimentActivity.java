@@ -4,10 +4,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,28 +18,32 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.learn.all_electric.adapter.ExperimentAdapter;
-import com.learn.all_electric.adapter.TestAdapter;
 import com.learn.all_electric.base.BaseActivity;
+import com.learn.all_electric.bean.AppInfo;
 import com.learn.all_electric.bean.ChooseExperimentBean;
-import com.learn.all_electric.bean.TestBean;
+import com.learn.all_electric.bean.DeviceDetailReponse;
 import com.learn.all_electric.bean.UserN;
-import com.learn.all_electric.constants.PackageConstants;
 import com.learn.all_electric.constants.SharedConstants;
+import com.learn.all_electric.myinterface.RequestCallBack;
+import com.learn.all_electric.utils.CommonUtils;
 import com.learn.all_electric.utils.LogUtil;
 import com.learn.all_electric.utils.PackageUtils;
 import com.learn.all_electric.utils.PreferenceUtil;
+import com.learn.all_electric.utils.RequestManager;
 import com.learn.all_electric.utils.StringUtils;
 import com.learn.all_electric.view.CustomDialog;
+import com.learn.all_electric.view.SpacesItemDecoration;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import butterknife.OnClick;
 
 /**
  * 管理员实验选择
  */
-public class AdminChooseExperimentActivity extends BaseActivity implements View.OnClickListener{
+public class AdminChooseExperimentActivity extends BaseActivity implements View.OnClickListener, RequestCallBack {
 
     private RelativeLayout mTitleLayout;
     private Button mBackBtn;
@@ -50,9 +54,14 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
     private TextView mSeatNoTv;
     private RecyclerView mExperimentView;
     private ArrayList<ChooseExperimentBean> mExperimentList;
+    private ArrayList<AppInfo> localExperimentApps;
+    private ArrayList<HashMap<String,String>> remoteVersionList;
     private ExperimentAdapter mExperimentAdapter;
     private CustomDialog mChooseDialog;
     private CustomDialog mNoticeDialog;
+    private CustomDialog mUpdateDialog;
+    private UIHandler mUIHandler;
+    private static final int MSG_NOTIFY_EXPERIMENT_LIST = 200;
 
     @Override
     protected int getLayoutId() {
@@ -77,13 +86,17 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
     protected void initListener() {
         mBackBtn.setOnClickListener(this);
       // mSettingImg.setOnClickListener(this);
-
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mUIHandler = new UIHandler(this);
+        mExperimentList = new ArrayList<ChooseExperimentBean>();
+        localExperimentApps = new ArrayList<AppInfo>();
+        remoteVersionList = new ArrayList<HashMap<String,String>>();
+        getRemoteAppInfo();
+        getLocalAppInfoList();
         inivariables();
 
     }
@@ -91,20 +104,18 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
     @Override
     protected void onResume() {
         super.onResume();
+
         initExperimentStatus();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(null != mChooseDialog){
-            mChooseDialog.dismiss();;
-            mChooseDialog= null;
-        }
-
-        if(null != mNoticeDialog){
-            mNoticeDialog.dismiss();;
-            mNoticeDialog = null;
+        releaseDialog();
+        clearList();
+        if(null != mUIHandler){
+            mUIHandler.removeCallbacksAndMessages(null);
+            mUIHandler = null;
         }
     }
 
@@ -116,13 +127,14 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
         // 考场编号
         mCentreNoTv.setText("1");
         // 实验
-        mExperimentList = new ArrayList<ChooseExperimentBean>();
-        mExperimentList.clear();
+
         //获取实验名称
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
         mExperimentView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(this,2);
         mExperimentView.setLayoutManager(mGridLayoutManager);
+
+        mExperimentList.clear();
         mExperimentList = getAllExperimentName();
         mExperimentAdapter = new ExperimentAdapter(getApplicationContext(),mExperimentList);
         mExperimentView.setAdapter(mExperimentAdapter);
@@ -154,12 +166,23 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
             @Override
             public void onItemUpdateVersion(int position) {
                 //判断是否存在此实验，存在提示升级
+                ChooseExperimentBean chooseExperimentBean = mExperimentList.get(position);
+                String experimentName = chooseExperimentBean.getExperiment_name();
+                String experimentNum = PackageUtils.getQuestionNumber(getApplicationContext(),experimentName);
+                if(!StringUtils.isEmpty(experimentNum)){
+                   showExperimentUpdateDialog(experimentNum,experimentName,getResources()
+                           .getString(R.string.admin_choose_experiment_update));
+                }
             }
         });
 
     }
 
+
     private void initExperimentStatus(){
+        mExperimentAdapter.setmExperimentList(mExperimentList);
+        mExperimentAdapter.notifyDataSetChanged();
+
         String qustionNo = PreferenceUtil.getInstance(getApplicationContext())
                 .getStringValue(SharedConstants.EXPERIMENT_SN,"");
         String experimentName = PackageUtils.getExperimentName(getApplicationContext(),qustionNo);
@@ -175,72 +198,19 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
     private ArrayList<ChooseExperimentBean> getAllExperimentName(){
         ArrayList<ChooseExperimentBean> list = new ArrayList<>();
         list.clear();
-        ChooseExperimentBean bean1 = new ChooseExperimentBean(getResources().getString(R.string.admin_name_experiment_sn1)
-                ,"V1.2.1",true,false);
-        ChooseExperimentBean bean2 = new ChooseExperimentBean(getResources().getString(R.string.admin_name_experiment_sn2)
-                ,"V1.2.1",false,false);
-        ChooseExperimentBean bean3 = new ChooseExperimentBean(getResources().getString(R.string.admin_name_experiment_sn3)
-                ,"V1.2.1",false,false);
-        ChooseExperimentBean bean4 = new ChooseExperimentBean(getResources().getString(R.string.admin_name_experiment_sn4)
-                ,"V1.2.1",false,false);
-        ChooseExperimentBean bean5 = new ChooseExperimentBean(getResources().getString(R.string.admin_name_experiment_sn5)
-                ,"V1.2.1",false,false);
-        ChooseExperimentBean bean6 = new ChooseExperimentBean(getResources().getString(R.string.admin_name_experiment_sn6)
-                ,"V1.2.1",false,false);
-        ChooseExperimentBean bean7 = new ChooseExperimentBean(getResources().getString(R.string.admin_name_experiment_sn7)
-                ,"V1.2.1",false,false);
-        ChooseExperimentBean bean8 = new ChooseExperimentBean(getResources().getString(R.string.admin_name_experiment_sn8)
-                ,"V1.2.1",false,false);
-        ChooseExperimentBean bean9 = new ChooseExperimentBean(getResources().getString(R.string.admin_name_experiment_sn9)
-                ,"V1.2.1",false,false);
-        ChooseExperimentBean bean10 = new ChooseExperimentBean(getResources().getString(R.string.admin_name_experiment_sn10)
-                ,"V1.2.1",false,false);
-        ChooseExperimentBean bean11 = new ChooseExperimentBean(getResources().getString(R.string.admin_name_experiment_sn11)
-                ,"V1.2.1",false,false);
-        ChooseExperimentBean bean12 = new ChooseExperimentBean(getResources().getString(R.string.admin_name_experiment_sn12)
-                ,"V1.2.1",false,false);
-        ChooseExperimentBean bean13= new ChooseExperimentBean(getResources().getString(R.string.admin_name_experiment_sn13)
-                ,"V1.2.1",false,false);
-
-        list.add(bean1);
-        list.add(bean2);
-        list.add(bean3);
-        list.add(bean4);
-        list.add(bean5);
-        list.add(bean6);
-        list.add(bean7);
-        list.add(bean8);
-        list.add(bean9);
-        list.add(bean10);
-        list.add(bean11);
-        list.add(bean12);
-        list.add(bean13);
+        if(localExperimentApps.size()>0){
+            for(int i = 0; i < localExperimentApps.size();i++){
+                ChooseExperimentBean bean  = new ChooseExperimentBean();
+                bean.setExperiment_name(localExperimentApps.get(i).appName);//app的名称
+                bean.setVersion(localExperimentApps.get(i).versionName);//版本号
+                bean.setCheck(false);
+                bean.setUpdate(false);
+                list.add(bean);
+            }
+        }
 
         return  list;
     }
-
-
-    // 自定义条目修饰类
-    public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int space;
-
-        public SpacesItemDecoration(int space) {
-            this.space = space;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            //不是第一个的格子都设一个左边和底部的间距
-            outRect.left = space;
-            outRect.bottom = space;
-            //由于每行都只有3个，所以第一个都是3的倍数，把左边距设为0
-            if (parent.getChildLayoutPosition(view) % 2 == 0) {
-                outRect.left = 0;
-            }
-        }
-    }
-
 
 
     /**
@@ -303,6 +273,10 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
         }
     }
 
+    /**
+     * 如果實驗未設置則對話框提示進行設置
+     * @param message
+     */
     private void showSetExperimentNoticeDialog(String message){
         if(null != mNoticeDialog){
             mNoticeDialog.dismiss();
@@ -344,6 +318,51 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
         }
     }
 
+    /**
+     * 顯示更新實驗更新對話框
+     *
+     */
+    private void showExperimentUpdateDialog(final String questionNo,final String experimentName,String message){
+        if(null != mUpdateDialog){
+            mUpdateDialog.dismiss();
+            mUpdateDialog = null;
+        }
+        if(null == mUpdateDialog){
+            mUpdateDialog = new CustomDialog(this);
+            LayoutInflater mInflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = (View)mInflater.inflate(R.layout.dialog_common_hint_layout, null);
+            TextView hintText = (TextView)view.findViewById(R.id.common_dialog_hint_txt);
+            TextView comonTxt = (TextView)view.findViewById(R.id.common_hint_txt);
+            comonTxt.setVisibility(View.INVISIBLE);
+            hintText.setText(message);
+
+            CustomDialog.Builder builder = new CustomDialog.Builder(this);
+            builder.setContentView(view);
+            builder.setPositiveButton(R.string.ok,  new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    // TODO Auto-generated method stub
+
+
+                    mUpdateDialog.dismiss();
+                }
+            });
+
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    // TODO Auto-generated method stub
+                    mUpdateDialog.dismiss();
+                    mUpdateDialog = null;
+                }
+            });
+            mUpdateDialog = builder.create();
+            mUpdateDialog.show();
+        }
+    }
+
 
     private void settingExperimentChecked(String experimentName){
         for(ChooseExperimentBean bean : mExperimentList){
@@ -380,6 +399,59 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
         }
     }
 
+    /**
+     * 获取服务器固件列表信息
+     * @param
+     */
+    private void  getRemoteAppInfo(){
+        String token = PreferenceUtil.getInstance(getApplicationContext())
+                .getStringValue(SharedConstants.TOKEN,"");
+        RequestManager.getInstance(getApplicationContext()).getDeviceListInfo(token,this);
+    }
+
+    //获取本地实验应用的信息
+    private void getLocalAppInfoList(){
+
+        localExperimentApps = CommonUtils.getAppInfoList(getApplicationContext());
+
+    }
+
+    private void releaseDialog(){
+
+        if(null != mChooseDialog){
+            mChooseDialog.dismiss();;
+            mChooseDialog= null;
+        }
+
+        if(null != mNoticeDialog){
+            mNoticeDialog.dismiss();;
+            mNoticeDialog = null;
+        }
+
+        if(null != mUpdateDialog){
+            mUpdateDialog.dismiss();
+            mUpdateDialog = null;
+        }
+    }
+
+    private void clearList(){
+        if(null != localExperimentApps){
+            localExperimentApps.clear();
+            localExperimentApps = null;
+        }
+
+        if(null != mExperimentList){
+            mExperimentList.clear();
+            mExperimentList = null;
+        }
+
+        if(null != remoteVersionList){
+            remoteVersionList.clear();
+            remoteVersionList = null;
+        }
+    }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -394,4 +466,83 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
 
     }
 
+    @Override
+    public void onFailure() {
+
+    }
+
+    @Override
+    public void onSuccess(String response) {
+
+        remoteVersionList.clear();
+        if(!StringUtils.isEmpty(response)){
+            Gson gson = new Gson();
+            DeviceDetailReponse deviceDetailReponse = gson.fromJson(response,DeviceDetailReponse.class);
+            if(deviceDetailReponse.getCode() == 200){
+                //获取每个的版本号
+                List<DeviceDetailReponse.Data> dataList = deviceDetailReponse.getData();
+                if(dataList.size()>0){
+                    for(DeviceDetailReponse.Data data:dataList){
+                        HashMap<String,String> version =  new HashMap<String,String>();
+                        LogUtil.i("AdminChooseExperimentActivity" , "data.getQuestionNo()" + data.getQuestionNo() +"");
+                        LogUtil.i("AdminChooseExperimentActivity" , "data.getFirewareVersion()" + data.getFirewareVersion() +"");
+                        version.put(data.getQuestionNo(),data.getFirewareVersion());
+                        remoteVersionList.add(version);
+                    }
+                }
+
+                mUIHandler.sendEmptyMessage(MSG_NOTIFY_EXPERIMENT_LIST);
+            }
+        }
+
+    }
+
+    private static class UIHandler extends Handler {
+
+        WeakReference<AdminChooseExperimentActivity> mActivityReference;
+
+        public UIHandler(AdminChooseExperimentActivity mActivity){
+            mActivityReference = new WeakReference<AdminChooseExperimentActivity>(mActivity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            final AdminChooseExperimentActivity mActivity = mActivityReference.get();
+            if(null == mActivity){
+                return;
+            }
+            switch (msg.what) {
+                case MSG_NOTIFY_EXPERIMENT_LIST:
+                    LogUtil.i("AdminChooseExperimentActivity","mActivity.remoteVersionList.size()" + mActivity.remoteVersionList.size());
+                    if(mActivity.remoteVersionList.size() > 0 ){
+                        for(HashMap<String,String> remoteAppInfo:mActivity.remoteVersionList){
+                            //每一个远程的app信息
+                            for(int i = 0;i< mActivity.mExperimentList.size();i++){
+                                //获取本地app的questionNo；
+                                LogUtil.i("AdminChooseExperimentActivity",
+                                        "mExperimentList.get(i).getExperiment_name()" + mActivity.mExperimentList.get(i).getExperiment_name());
+                                String questionNo = PackageUtils.getQuestionNumber(mActivity.getApplicationContext(),mActivity.mExperimentList.get(i).getExperiment_name());
+
+                                String remoteVersion = remoteAppInfo.get(questionNo);
+                                //本地app信息的与远程的app版本信息进行比较
+                                if(remoteVersion != null){
+                                    if(!remoteVersion.equals(mActivity.mExperimentList.get(i).getVersion())){
+                                        mActivity.mExperimentList.get(i).setUpdate(true);
+                                    }else{
+                                        mActivity.mExperimentList.get(i).setUpdate(false);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    mActivity.mExperimentAdapter.setmExperimentList(mActivity.mExperimentList);
+                    mActivity.mExperimentAdapter.notifyDataSetChanged();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
 }

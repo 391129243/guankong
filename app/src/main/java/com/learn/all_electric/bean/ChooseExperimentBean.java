@@ -10,6 +10,9 @@ public class ChooseExperimentBean {
     boolean isCheck;//是否被选中
 
 
+    public ChooseExperimentBean(){
+
+    }
     public ChooseExperimentBean(String experiment_name,
             String version,
             boolean isUpdate,

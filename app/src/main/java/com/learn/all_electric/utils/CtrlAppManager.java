@@ -33,6 +33,8 @@ public class CtrlAppManager {
                 .setValueByName(SharedConstants.ACCESS_TOKEN,"");
         PreferenceUtil.getInstance(mContext)
                 .setValueByName(SharedConstants.TOKEN,"");
+        PreferenceUtil.getInstance(mContext)
+                .setValueByName(SharedConstants.LOGIN_USERTPYE,"device-teacher");
 
     }
 }

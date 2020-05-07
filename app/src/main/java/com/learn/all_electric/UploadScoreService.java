@@ -80,8 +80,7 @@ public class UploadScoreService extends IntentService {
             }
 
 
-        }else{
-            //
+        }else{            //
 
         }
     }

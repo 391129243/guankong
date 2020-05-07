@@ -15,19 +15,22 @@ import com.learn.all_electric.bean.UserLoginResponse;
 import com.learn.all_electric.constants.Constant;
 import com.learn.all_electric.myinterface.ExamDetailCallback;
 import com.learn.all_electric.myinterface.LoginResponseCallback;
+import com.learn.all_electric.myinterface.RequestCallBack;
 
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 public class RequestManager implements ExamDetailCallback{
-    public static String USER_LOGIN_URL = "http://kkclass-api.asit.me/asit-auth/oauth/token?";
+    private static String USER_LOGIN_URL = "http://kkclass-api.asit.me/asit-auth/oauth/token?";
 
-    public static String REFRESH_URL = "http://kkclass-api.asit.me/asit-auth/oauth/token?";
+    private static String REFRESH_URL = "http://kkclass-api.asit.me/asit-auth/oauth/token?";
 
-    public static String EXAM_DETAIL_URL = "http://kkclass-api.asit.me/asit-device/exam/detail?";
+    private static String EXAM_DETAIL_URL = "http://kkclass-api.asit.me/asit-device/exam/detail?";
 
-    public static String UPLOAD_SCORE_URL = "http://kkclass-api.asit.me/asit-device/exam/score";
+    private static String UPLOAD_SCORE_URL = "http://kkclass-api.asit.me/asit-device/exam/score";
+    //固件列表
+    private static String DEVICE_LIST_URL = "http://kkclass-api.asit.me/asit-device/fireware/list";
 
     private static RequestManager mInstance = null;
     private RequestHander mRequestHandler = null;
@@ -155,7 +158,14 @@ public class RequestManager implements ExamDetailCallback{
             String questScoreBody = gson.toJson(examScoreBean);
             OkHttpUtils.doPostByBody(UPLOAD_SCORE_URL,questScoreBody,token,this);
         }
+    }
 
+    /**
+     * 获取设备列表信息
+     */
+    public void getDeviceListInfo(String token, RequestCallBack callBack){
+
+        OkHttpUtils.doGetByHeaders(DEVICE_LIST_URL,token,callBack);
     }
 
     @Override
