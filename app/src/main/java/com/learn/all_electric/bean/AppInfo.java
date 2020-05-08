@@ -1,9 +1,12 @@
 package com.learn.all_electric.bean;
 
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
-public class AppInfo {
+import com.learn.all_electric.utils.StringUtils;
+
+public class AppInfo implements Comparable<AppInfo>{
     public String appName = "";
     public String packageName = "";
     public String versionName = "";
@@ -48,4 +51,9 @@ public class AppInfo {
     }
 
 
+    @Override
+    public int compareTo(AppInfo appInfo) {
+        int i = StringUtils.convertToInt(this.getAppName().substring(0,1),0) - StringUtils.convertToInt(appInfo.getAppName().substring(0,1),0);//先按照年龄排序
+        return i;
+    }
 }

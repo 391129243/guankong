@@ -1,9 +1,13 @@
 package com.learn.all_electric.bean;
 
+import android.support.annotation.NonNull;
+
+import com.learn.all_electric.utils.StringUtils;
+
 /**
  * 选择实验
  */
-public class ChooseExperimentBean {
+public class ChooseExperimentBean implements Comparable<ChooseExperimentBean>{
     String experiment_name;//学科名称
     String version;
     boolean isUpdate;//是否需要更新
@@ -54,5 +58,13 @@ public class ChooseExperimentBean {
 
     public void setCheck(boolean check) {
         isCheck = check;
+    }
+
+
+    @Override
+    public int compareTo(@NonNull ChooseExperimentBean bean) {
+        int i = StringUtils.convertToInt(this.getExperiment_name().substring(0,1),0)
+                - StringUtils.convertToInt(bean.getExperiment_name().substring(0,1),0);//先按照年龄排序
+        return i;
     }
 }

@@ -36,6 +36,7 @@ import com.learn.all_electric.view.SpacesItemDecoration;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -180,8 +181,6 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
 
 
     private void initExperimentStatus(){
-        mExperimentAdapter.setmExperimentList(mExperimentList);
-        mExperimentAdapter.notifyDataSetChanged();
 
         String qustionNo = PreferenceUtil.getInstance(getApplicationContext())
                 .getStringValue(SharedConstants.EXPERIMENT_SN,"");
@@ -206,9 +205,11 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
                 bean.setCheck(false);
                 bean.setUpdate(false);
                 list.add(bean);
+
+
             }
         }
-
+        Collections.reverse(list);
         return  list;
     }
 
@@ -411,7 +412,6 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
 
     //获取本地实验应用的信息
     private void getLocalAppInfoList(){
-
         localExperimentApps = CommonUtils.getAppInfoList(getApplicationContext());
 
     }
@@ -484,10 +484,9 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
                 if(dataList.size()>0){
                     for(DeviceDetailReponse.Data data:dataList){
                         HashMap<String,String> version =  new HashMap<String,String>();
-                        LogUtil.i("AdminChooseExperimentActivity" , "data.getQuestionNo()" + data.getQuestionNo() +"");
-                        LogUtil.i("AdminChooseExperimentActivity" , "data.getFirewareVersion()" + data.getFirewareVersion() +"");
                         version.put(data.getQuestionNo(),data.getFirewareVersion());
                         remoteVersionList.add(version);
+
                     }
                 }
 
@@ -536,7 +535,7 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
                             }
                         }
                     }
-                    mActivity.mExperimentAdapter.setmExperimentList(mActivity.mExperimentList);
+                    mActivity.mExperimentAdapter.setExperimentList(mActivity.mExperimentList);
                     mActivity.mExperimentAdapter.notifyDataSetChanged();
                     break;
 

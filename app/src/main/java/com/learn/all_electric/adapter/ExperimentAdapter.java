@@ -13,10 +13,11 @@ import android.widget.TextView;
 import com.learn.all_electric.R;
 import com.learn.all_electric.bean.ChooseExperimentBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExperimentAdapter extends RecyclerView.Adapter<ExperimentAdapter.ExperimentHolder> {
-    private List<ChooseExperimentBean> mExperimentList;
+    private List<ChooseExperimentBean> mExperimentList = new ArrayList<ChooseExperimentBean>();
     private static Context mContext;
 
     public ExperimentAdapter(Context context,List<ChooseExperimentBean> list){
@@ -24,7 +25,7 @@ public class ExperimentAdapter extends RecyclerView.Adapter<ExperimentAdapter.Ex
         this.mContext = context;
     }
 
-    public void setmExperimentList(List<ChooseExperimentBean> list){
+    public void setExperimentList(List<ChooseExperimentBean> list){
         this.mExperimentList = list;
     }
 

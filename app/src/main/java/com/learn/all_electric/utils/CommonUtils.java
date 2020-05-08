@@ -14,6 +14,7 @@ import com.learn.all_electric.bean.AppInfo;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,9 +123,10 @@ public class CommonUtils {
                     appInfo.setVersionName(pInfo.versionName);
                     appInfo.setVersionCode(pInfo.versionCode);
                     items.add(appInfo);
+
                 }
             }
-
+            Collections.sort(items);
             return items;
 
         }catch (Exception e){
