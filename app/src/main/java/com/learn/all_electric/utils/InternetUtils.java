@@ -3,6 +3,9 @@ package com.learn.all_electric.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.ScanResult;
+
+import com.learn.all_electric.WlanConnectActivity;
 
 public class InternetUtils {
     //判断当前网络是否连接
@@ -25,4 +28,24 @@ public class InternetUtils {
         }
         return false;
     }
+
+
+    public static SecurityMode getSecurityMode(ScanResult scanResult){
+        if (scanResult.capabilities.contains("WEP")) {
+            return SecurityMode.WEP;
+        } else if (scanResult.capabilities.contains("PSK")) {
+            return SecurityMode.WPA;//WPA/WPA2 PSK
+        } else if (scanResult.capabilities.contains("EAP")) {
+            return SecurityMode.WPA2;
+        }
+        return SecurityMode.OPEN;
+    }
+    /**
+     * 这个枚举用于表示网络加密模式
+     */
+    public enum SecurityMode {
+        OPEN, WEP, WPA, WPA2
+    }
+
+
 }

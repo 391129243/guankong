@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.learn.all_electric.R;
 import com.learn.all_electric.bean.MScanWifi;
+import com.learn.all_electric.utils.InternetUtils;
 
 public class WifiConnectAdapter extends BaseAdapter {
 
@@ -36,7 +37,6 @@ public class WifiConnectAdapter extends BaseAdapter {
 	}
 	
 	public void setWifiList(List<MScanWifi> list){
-		Log.i("wifi", "WifiConnectAdapter setWifiList---"+ list.size());
 		this.mWifiResultList = list;
 		this.wifiConfigList = wifiManager.getConfiguredNetworks();
 		
@@ -102,8 +102,14 @@ public class WifiConnectAdapter extends BaseAdapter {
 					 holder.mWifiStatusTv.setText(R.string.wifi_connect);
 					 holder.mWifiStatusTv.setTextColor(mContext.getResources().getColor(R.color.blue));
 				 }else if(scanResult.SSID.equals(ssid) && configuration.status != 0){
-					 holder.mWifiStatusTv.setText(R.string.wifi_save);
-					 holder.mWifiStatusTv.setTextColor(mContext.getResources().getColor(R.color.black));
+				 	 //没密码不用显示已保存
+					 if(InternetUtils.SecurityMode.OPEN.equals(InternetUtils.getSecurityMode(scanResult))){
+						 holder.mWifiStatusTv.setText("");
+					 }else{
+						 holder.mWifiStatusTv.setText(R.string.wifi_save);
+						 holder.mWifiStatusTv.setTextColor(mContext.getResources().getColor(R.color.black));
+					 }
+
 				 }			
 			}
 		}

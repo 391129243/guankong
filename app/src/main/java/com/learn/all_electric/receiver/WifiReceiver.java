@@ -42,15 +42,16 @@ public class WifiReceiver extends BroadcastReceiver {
 		}
 		if(action.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)){
 			//wifi开关变化通知
+			Log.i("WlanConnectActivity", "handlerWifiState");
 			handlerWifiState(intent);
 			
 		}else if(action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)){
-			
+
 			handlerConnectState(intent);
 			
 		}else if(action.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)){
 			//wifi扫描结果通知
-			
+
 			handlerWifiScanResult();
 		}
 	}
@@ -92,6 +93,7 @@ public class WifiReceiver extends BroadcastReceiver {
 	
 	/**处理wifi连接发生改变的状态**/
 	private void handlerConnectState(Intent intent){
+		Log.i("WlanConnectActivity", "handlerConnectState");
 		NetworkInfo networkInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);		 
 		
 		if(null != networkInfo && networkInfo.isConnected()){

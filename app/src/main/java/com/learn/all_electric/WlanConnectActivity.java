@@ -13,6 +13,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiEnterpriseConfig;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
@@ -46,6 +47,7 @@ import com.learn.all_electric.base.BaseActivity;
 import com.learn.all_electric.bean.MScanWifi;
 import com.learn.all_electric.myinterface.WifiReceiverActionListener;
 import com.learn.all_electric.receiver.WifiReceiver;
+import com.learn.all_electric.utils.LogUtil;
 import com.learn.all_electric.view.WifiNoticeDialog;
 
 
@@ -147,7 +149,7 @@ public class WlanConnectActivity extends BaseActivity {
 					if(SecurityMode.OPEN.equals(getSecurityMode(scanResult))){
 						//无密码
 						Log.i(TAG, "----connect not password----");
-						connecStatus(true);
+						//connecStatus(true);
 						WifiConfiguration wifiConfiguration = createWifiConfiguration(scanResult.SSID, "", SecurityMode.OPEN);
 						connectWifiByPwd(wifiConfiguration);
 					}else{
@@ -454,7 +456,7 @@ public class WlanConnectActivity extends BaseActivity {
 	 * @param networkId
 	 * @return 是否断开
 	 * **/
-	public Boolean disconnectWifi(int networkId){
+	public boolean disconnectWifi(int networkId){
 		Log.i(TAG, "disconnectWifi--netId---" + networkId);
 		boolean isDisable = wifiManager.disableNetwork(networkId);
 		boolean isDisconnect = wifiManager.disconnect();
@@ -462,18 +464,19 @@ public class WlanConnectActivity extends BaseActivity {
 	}
 	
 	/**忘记连接的账号和密码***/
-	private boolean forgetWifi(String targetssid){	
+	private boolean forgetWifi(String targetssid){
 		boolean isForget = false;
 		List<WifiConfiguration> wifiConfigs = wifiManager.getConfiguredNetworks();
         for (WifiConfiguration wifiConfig : wifiConfigs) {
             String ssid = wifiConfig.SSID;
-            Log.i(TAG, "removeWifiBySsid ssid=" + ssid);
             if (ssid.equals("\"" + targetssid + "\"")) {
-                Log.d(TAG, "removeWifiBySsid success, SSID = " + wifiConfig.SSID + " netId = " + String.valueOf(wifiConfig.networkId));
                 wifiManager.removeNetwork(wifiConfig.networkId);
                 isForget = wifiManager.saveConfiguration();
+				Log.i(TAG, "removeWifiBySsid ssid=" + isForget);
             }
         }
+
+
         return isForget;
 	}
 	
@@ -685,11 +688,10 @@ public class WlanConnectActivity extends BaseActivity {
 						return; 
 					}
 					SecurityMode mode = getSecurityMode(scanResult);
-					Log.i(TAG, "--mode---" + mode);
 					//如果其他的在连接应该断开连接
 					WifiConfiguration wifiConfiguration = createWifiConfiguration(ssid, pwd, mode);
 					connectWifiByPwd(wifiConfiguration);
-					connecStatus(true);
+					//connecStatus(true);
 					connectDialog.dismiss();					
 				}
 			});
@@ -738,7 +740,10 @@ public class WlanConnectActivity extends BaseActivity {
 					// TODO Auto-generated method stub
 					//	断开当前wifi
 					int networkId = getNetworkId();
-					disconnectWifi(networkId);
+					boolean isForget = forgetWifi(scanWifi.getScanResult().SSID);
+					if(isForget){
+						mUIHandler.sendEmptyMessage(MSG_UPDATE_WIFILIST);
+					}
 					forgetDialog.dismiss();
 				}
 			});
@@ -760,6 +765,7 @@ public class WlanConnectActivity extends BaseActivity {
 	
 	/****
 	 * 已经连接过的只有forget、connect、cancel状态
+	 *
 	 */
 	private void showReconnectDialog(final ScanResult scanResult,final WifiConfiguration wifiConfiguration){
 		if(null != reconnectDialog){
@@ -782,7 +788,10 @@ public class WlanConnectActivity extends BaseActivity {
 					//	断开当前wifi
 					//int networkId = getNetworkId();
 					Log.i(TAG, "showReconnectDialog--forget---scanResult.SSID--" + scanResult.SSID);
-					forgetWifi(scanResult.SSID);
+					boolean isForget = forgetWifi(scanResult.SSID);
+					if(isForget){
+						mUIHandler.sendEmptyMessage(MSG_UPDATE_WIFILIST);
+					}
 					reconnectDialog.dismiss();
 				}
 			});
@@ -801,8 +810,15 @@ public class WlanConnectActivity extends BaseActivity {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					// TODO Auto-generated method stub
-					connecStatus(true);
-					connectWifiByPwd(wifiConfiguration);
+
+					//connecStatus(true);
+					//判断当前的ssid是否存在
+					WifiConfiguration tempConfig = isExits(scanResult.SSID);
+					Log.i(TAG, "showReconnectDialog--forget---exit--" +tempConfig.SSID);
+					if(null != tempConfig){
+						connectWifiByPwd(tempConfig);
+					}
+					//connectWifiByPwd(wifiConfiguration);
 					reconnectDialog.dismiss();
 				}
 			});
@@ -827,11 +843,10 @@ public class WlanConnectActivity extends BaseActivity {
 		@Override
 		protected Boolean doInBackground(Void... arg0) {
 			// TODO Auto-generated method stub		
-			boolean result = false; 
+			boolean result = false;
 			int networkId = wifiManager.addNetwork(mWifiConfiguration);
-			result = wifiManager.enableNetwork(networkId, true);
-			Log.i(TAG, "doInBackground Wifi--netId---" + networkId);
-			Log.i(TAG, "doInBackground Wifi--result---" + result);
+			result = wifiManager.enableNetwork(mWifiConfiguration.networkId, true);
+			Log.i(TAG, "connect Wifi--result---" + result);
 			return result;
 		}		
 		
@@ -874,7 +889,7 @@ public class WlanConnectActivity extends BaseActivity {
 				
 				NetworkInfo networkInfo = (NetworkInfo)msg.obj;				
 				if(networkInfo.getState().equals(NetworkInfo.State.CONNECTED)){
-					mActivity.connecStatus(false);
+					//mActivity.connecStatus(false);
 				}else if(networkInfo.getState().equals(NetworkInfo.State.DISCONNECTED)){
 					Log.i(TAG, "UIHandler---disconnected" + networkInfo.getState());
 				}
@@ -882,9 +897,8 @@ public class WlanConnectActivity extends BaseActivity {
 				mActivity.wifiConnectAdapter.notifyDataSetChanged();
 				break;
 				
-			case MSG_UPDATE_WIFILIST:				
-				mActivity.wifiConnectAdapter.setWifiList(mActivity.mWifiScanList);
-				mActivity.wifiConnectAdapter.notifyDataSetChanged();
+			case MSG_UPDATE_WIFILIST:
+				mActivity.startScan();
 				break;
 				
 			case MSG_WIFI_TURN_OFF:
