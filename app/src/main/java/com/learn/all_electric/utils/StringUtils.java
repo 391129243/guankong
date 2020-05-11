@@ -34,4 +34,12 @@ public class StringUtils {
             }
         }
     }
+
+    public static String getExperimentNum(String experimentName){
+        String result = "";
+        if(experimentName.contains("-")){
+            result = experimentName.substring(0,experimentName.indexOf("-"));
+        }
+        return result;
+    }
 }

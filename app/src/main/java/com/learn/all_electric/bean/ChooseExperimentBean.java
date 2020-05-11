@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.learn.all_electric.utils.StringUtils;
 
+import java.util.Comparator;
+
 /**
  * 选择实验
  */
@@ -12,6 +14,7 @@ public class ChooseExperimentBean implements Comparable<ChooseExperimentBean>{
     String version;
     boolean isUpdate;//是否需要更新
     boolean isCheck;//是否被选中
+    int experiment_number;
 
 
     public ChooseExperimentBean(){
@@ -20,11 +23,13 @@ public class ChooseExperimentBean implements Comparable<ChooseExperimentBean>{
     public ChooseExperimentBean(String experiment_name,
             String version,
             boolean isUpdate,
-            boolean isCheck){
+            boolean isCheck,
+            int number){
         this.experiment_name = experiment_name;
         this.version = version;
         this.isUpdate = isUpdate;
         this.isCheck = isCheck;
+        this.experiment_number = number;
     }
 
 
@@ -60,11 +65,37 @@ public class ChooseExperimentBean implements Comparable<ChooseExperimentBean>{
         isCheck = check;
     }
 
+    public int getExperiment_number() {
+        return experiment_number;
+    }
+
+    public void setExperiment_number(int experiment_number) {
+        this.experiment_number = experiment_number;
+    }
+
+
+
+
+
+/*
+    @Override
+    public int compare(ChooseExperimentBean o1, ChooseExperimentBean o2) {
+        if (o1.getExperimentNumber()>o2.getExperimentNumber()){
+            return -1;
+        }
+        return 1;
+    }
+*/
 
     @Override
     public int compareTo(@NonNull ChooseExperimentBean bean) {
-        int i = StringUtils.convertToInt(this.getExperiment_name().substring(0,1),0)
-                - StringUtils.convertToInt(bean.getExperiment_name().substring(0,1),0);//先按照年龄排序
-        return i;
+        if (this.experiment_number>bean.getExperiment_number()) {
+            return (this.experiment_number - bean.getExperiment_number());
+        }
+        if (this.experiment_number<bean.getExperiment_number()) {
+            return (this.experiment_number - bean.getExperiment_number());
+        }
+        return 0;
+
     }
 }

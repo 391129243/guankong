@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="content_text" format="string"></attr>
+    <attr name ="title_text" format="string"></attr>
     <attr name="content_text_color" format="color"></attr>
     <!--loading控件-->
     <declare-styleable name="SLoadingIndicatorView">
@@ -50,4 +51,9 @@
         <attr name="isRandom"/>
     </declare-styleable>
 
+    <declare-styleable name= "CustomSettingItem">
+        <attr name="title_icon" format="reference"></attr>
+        <attr name ="title_text"/>
+        <attr name ="content_text"/>
+    </declare-styleable>
 </resources>

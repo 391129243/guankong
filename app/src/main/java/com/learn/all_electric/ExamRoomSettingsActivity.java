@@ -62,7 +62,7 @@ public class ExamRoomSettingsActivity extends BaseActivity implements View.OnCli
         mLogoutBtn = (Button)findViewById(R.id.logout);
         mSeatNoTxt = (TextView)findViewById(R.id.exam_setting_choose_seat_txt);
         mSubmitBtn = (Button)findViewById(R.id.exam_setting_submit_seat_btn);
-        //mSettingImg = (ImageView)findViewById(R.id.setting_img);
+        mSettingImg = (ImageView)findViewById(R.id.setting_img);
         mSeat_RecyView = (RecyclerView)findViewById(R.id.exam_room_recycler_seat);
     }
 
@@ -70,7 +70,7 @@ public class ExamRoomSettingsActivity extends BaseActivity implements View.OnCli
     protected void initListener() {
         mLogoutBtn.setOnClickListener(this);
         mSubmitBtn.setOnClickListener(this);
-        //mSettingImg.setOnClickListener(this);
+        mSettingImg.setOnClickListener(this);
     }
 
     @Override
@@ -251,7 +251,7 @@ public class ExamRoomSettingsActivity extends BaseActivity implements View.OnCli
                 startActivity(new Intent(ExamRoomSettingsActivity.this, AdminChooseExperimentActivity.class));
                 break;
             case R.id.setting_img:
-                //startActivity(new Intent(ExamRoomSettingsActivity.this, WlanConnectActivity.class));
+                startActivity(new Intent(ExamRoomSettingsActivity.this, SettingActivity.class));
                 break;
              default:
                 break;

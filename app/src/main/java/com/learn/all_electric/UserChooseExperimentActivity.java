@@ -63,13 +63,13 @@ public class UserChooseExperimentActivity extends BaseActivity implements View.O
     }
 
     private void getAllExperimentName(){
-        ChooseExperimentBean bean1 = new ChooseExperimentBean("1、连接串联电路和并联电路","V1.2.1",true,false);
-        ChooseExperimentBean bean2 = new ChooseExperimentBean("2、串联并联电路中电流的关系","V1.2.1",false,false);
-        ChooseExperimentBean bean3 = new ChooseExperimentBean("3、串联并联电路的电压的关系","V1.2.1",false,false);
-        ChooseExperimentBean bean4 = new ChooseExperimentBean("4、测量小灯泡的电阻","V1.2.1",false,false);
-        ChooseExperimentBean bean5 = new ChooseExperimentBean("5、测量小灯泡的电功率","V1.2.1",false,false);
-        ChooseExperimentBean bean6 = new ChooseExperimentBean("6、探究影响摩擦力大小的因素","V1.2.1",false,false);
-        ChooseExperimentBean bean7 = new ChooseExperimentBean("7、探究杠杆的平衡条件","V1.2.1",false,false);
+        ChooseExperimentBean bean1 = new ChooseExperimentBean("1、连接串联电路和并联电路","V1.2.1",true,false,1);
+        ChooseExperimentBean bean2 = new ChooseExperimentBean("2、串联并联电路中电流的关系","V1.2.1",false,false,2);
+        ChooseExperimentBean bean3 = new ChooseExperimentBean("3、串联并联电路的电压的关系","V1.2.1",false,false,3);
+        ChooseExperimentBean bean4 = new ChooseExperimentBean("4、测量小灯泡的电阻","V1.2.1",false,false,4);
+        ChooseExperimentBean bean5 = new ChooseExperimentBean("5、测量小灯泡的电功率","V1.2.1",false,false,5);
+        ChooseExperimentBean bean6 = new ChooseExperimentBean("6、探究影响摩擦力大小的因素","V1.2.1",false,false,6);
+        ChooseExperimentBean bean7 = new ChooseExperimentBean("7、探究杠杆的平衡条件","V1.2.1",false,false,7);
         mExperimentList.add(bean1);
         mExperimentList.add(bean2);
         mExperimentList.add(bean3);

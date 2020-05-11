@@ -42,7 +42,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/logout"
             android:src="@drawable/icon_setting"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:layout_marginRight="20dp"/>
     </RelativeLayout>
     <RelativeLayout

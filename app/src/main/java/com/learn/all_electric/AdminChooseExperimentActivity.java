@@ -1,5 +1,6 @@
 package com.learn.all_electric;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,6 +38,7 @@ import com.learn.all_electric.view.SpacesItemDecoration;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -73,7 +75,7 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
     protected void initViews(Bundle savedInstanceState) {
         mTitleLayout = (RelativeLayout)findViewById(R.id.admin_choose_experient_title_layout);
         mBackBtn = (Button)mTitleLayout.findViewById(R.id.back_btn);
-        //mSettingImg = (ImageView)mTitleLayout.findViewById(R.id.setting_img);
+        mSettingImg = (ImageView)mTitleLayout.findViewById(R.id.setting_img);
         mExamNameTv = (TextView)findViewById(R.id.admin_chooce_exam_name_txt);
         mSchoolTv = (TextView)findViewById(R.id.admin_chooce_exam_school_txt);
         mCentreNoTv = (TextView)findViewById(R.id.admin_chooce_exam_roomnum_txt);
@@ -86,7 +88,7 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
     @Override
     protected void initListener() {
         mBackBtn.setOnClickListener(this);
-      // mSettingImg.setOnClickListener(this);
+        mSettingImg.setOnClickListener(this);
     }
 
     @Override
@@ -204,12 +206,12 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
                 bean.setVersion(localExperimentApps.get(i).versionName);//版本号
                 bean.setCheck(false);
                 bean.setUpdate(false);
+                bean.setExperiment_number(StringUtils.convertToInt(StringUtils.getExperimentNum(localExperimentApps.get(i).appName),0));
                 list.add(bean);
 
 
             }
         }
-        Collections.reverse(list);
         return  list;
     }
 
@@ -459,8 +461,8 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
                 finish();
                 break;
             case R.id.setting_img:
-                //Intent intent = new Intent(AdminChooseExperimentActivity.this,WlanConnectActivity.class);
-               // startActivity(intent);
+                Intent intent = new Intent(AdminChooseExperimentActivity.this,SettingActivity.class);
+                startActivity(intent);
                 break;
         }
 
@@ -513,7 +515,7 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
             }
             switch (msg.what) {
                 case MSG_NOTIFY_EXPERIMENT_LIST:
-                    LogUtil.i("AdminChooseExperimentActivity","mActivity.remoteVersionList.size()" + mActivity.remoteVersionList.size());
+
                     if(mActivity.remoteVersionList.size() > 0 ){
                         for(HashMap<String,String> remoteAppInfo:mActivity.remoteVersionList){
                             //每一个远程的app信息
@@ -535,6 +537,7 @@ public class AdminChooseExperimentActivity extends BaseActivity implements View.
                             }
                         }
                     }
+                    Collections.sort(mActivity.mExperimentList);
                     mActivity.mExperimentAdapter.setExperimentList(mActivity.mExperimentList);
                     mActivity.mExperimentAdapter.notifyDataSetChanged();
                     break;

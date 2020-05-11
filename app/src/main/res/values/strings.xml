@@ -99,4 +99,11 @@
     <string name = "wifi_toast_null">Wifi密码不能为空</string>
     <string name = "wifi_toast_length">Wifi密码长度不能小于8位</string>
     <string name = "wifi_prompt">提示</string>
+
+    <string name = "setting_wifi">网络</string>
+    <string name = "setting_info">设备信息</string>
+    <string name = "setting_wifi_disconnect">未连接</string>
+    <string name = "setting_wifi_disable">不可用</string>
+    <string name = "setting_device_serialnumber">设备序列号: </string>
+
 </resources>

@@ -1,7 +1,7 @@
 package com.learn.all_electric.constants;
 
 public class PackageConstants {
-    public static String SN1_BALANCEBAR_PACKAGENAME = "com.learn.first_electric";
+    public static String SN1_BALANCEBAR_PACKAGENAME = "com.winters.first_electric";
     //探究杠杆平衡
     public static String SN7_BALANCEBAR_PACKAGENAME = "com.winters.balancebar";
     //天平测量密度

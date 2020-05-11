@@ -39,5 +39,5 @@
         android:layout_toLeftOf="@id/back_btn"
         android:src="@drawable/icon_setting"
         android:layout_marginRight="20dp"
-        android:visibility="invisible"/>
+        android:visibility="visible"/>
 </RelativeLayout>
